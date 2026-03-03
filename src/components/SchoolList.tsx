@@ -43,6 +43,12 @@ export default function SchoolList({ schools }: SchoolListProps) {
                                 {school.project || 'Project'}
                             </div>
                             <h3 className="text-xl font-bold mb-3 leading-tight">{school.name}</h3>
+                            {!school.hasCoordinates && (
+                                <div className="mb-4 inline-flex items-center gap-2 px-3 py-1 bg-red-900/20 border border-red-500/30 text-red-400 rounded-sm">
+                                    <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span>
+                                    <span className="text-[9px] font-bold uppercase tracking-wider">{t('needsCoordinates')}</span>
+                                </div>
+                            )}
                             <p className="text-cool-mist text-xs mb-6 uppercase tracking-wider">
                                 {school.municipality}, {school.state}
                             </p>

@@ -49,6 +49,17 @@ export default function SchoolDetailModal({ school, onClose }: SchoolDetailModal
                                 {t('schoolDetails')}
                             </h3>
                             <div className="space-y-4 text-sm">
+                                {!school.hasCoordinates && (
+                                    <div className="p-3 bg-red-900/10 border border-red-500/20 rounded-sm">
+                                        <div className="flex items-center gap-2 mb-1 text-red-400">
+                                            <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span>
+                                            <span className="text-[9px] font-bold uppercase tracking-wider">{t('needsCoordinates')}</span>
+                                        </div>
+                                        <p className="text-[9px] text-cool-mist leading-relaxed uppercase tracking-[0.05em]">
+                                            {t('coordConfidence')}
+                                        </p>
+                                    </div>
+                                )}
                                 <div>
                                     <span className="text-cool-mist uppercase block text-[10px] tracking-wider mb-1">{t('address')}</span>
                                     <p>{school.address}, {school.neighborhood}</p>
@@ -67,6 +78,12 @@ export default function SchoolDetailModal({ school, onClose }: SchoolDetailModal
                                         <p className="text-lg font-bold">{school.staffTotal}</p>
                                     </div>
                                 </div>
+                                {school.imageMetadata?.dateTaken && (
+                                    <div className="pt-4 border-t border-border/10">
+                                        <span className="text-accent uppercase block text-[10px] tracking-wider mb-1">{t('imageDateTaken')}</span>
+                                        <p className="font-bold">{school.imageMetadata.dateTaken}</p>
+                                    </div>
+                                )}
                             </div>
                         </div>
 

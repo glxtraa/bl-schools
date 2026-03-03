@@ -18,6 +18,11 @@ export interface School {
   project: string;
   lastUpdated: string;
   status: string;
+  hasCoordinates: boolean;
+  imageMetadata?: {
+    dateTaken?: string;
+    camera?: string;
+  };
   infrastructure: {
     cisternLiters: number;
     tinacoLiters: number;

@@ -111,7 +111,7 @@ export default function SchoolMap({ schools, showBasins = false }: SchoolMapProp
 
                 <MapController geojson={basinData} showBasins={showBasins} />
 
-                {schools.map((school) => (
+                {schools.filter(s => s.hasCoordinates).map((school) => (
                     <Marker
                         key={school.id}
                         position={[school.latitude, school.longitude]}

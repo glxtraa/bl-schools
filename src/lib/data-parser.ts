@@ -41,11 +41,14 @@ export async function getSchools(): Promise<School[]> {
                         }
                     }
 
+                    const hasCoordinates = !isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0;
+
                     return {
                         id: row['_id'] || index.toString(),
                         name: row['NOMBRE DE LA ESCUELA / CENTRO COMUNITARIO*'] || 'Unknown School',
                         latitude: lat || 0,
                         longitude: lng || 0,
+                        hasCoordinates,
                         address: row['CALLE'] || '',
                         neighborhood: row['COLONIA / LOCALIDAD'] || '',
                         municipality: row['TERRITORIAL / MUNICIPIO'] || '',
@@ -61,6 +64,9 @@ export async function getSchools(): Promise<School[]> {
                         project: row['PROYECTO'] || '',
                         lastUpdated: row['FECHA DE SEGUIMIENTO'] || '',
                         status: row['ESTATUS*'] || 'Active',
+                        imageMetadata: {
+                            dateTaken: row['FECHA DE SEGUIMIENTO'] || undefined,
+                        },
                         infrastructure: {
                             cisternLiters: parseInt(row['¿QUE CAPACIDAD (LITRO)  DE ALMACENAMIENTO TIENE(N) LA(S) CISTERNA(S)?']) || 0,
                             tinacoLiters: parseInt(row['almacen_tinaco_total']) || 0,
@@ -68,9 +74,9 @@ export async function getSchools(): Promise<School[]> {
                         },
                         notes: row['DESCRIBE BREVEMENTE LA SITUACION DE AGUA EN LA ESCUELA'] || row['DESCRIBE LA SITUACION'] || '',
                     };
-                }).filter((s: School) => s.latitude !== 0 && s.longitude !== 0 && !isNaN(s.latitude));
+                });
 
-                console.log(`[DataParser] Loaded ${schools.length} schools with valid coordinates out of ${results.data.length} rows.`);
+                console.log(`[DataParser] Loaded ${schools.length} schools total. (${schools.filter(s => s.hasCoordinates).length} with coords)`);
                 resolve(schools);
             },
             error: (error: any) => {
