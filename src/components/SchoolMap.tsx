@@ -111,10 +111,10 @@ export default function SchoolMap({ schools, showBasins = false }: SchoolMapProp
 
                 <MapController geojson={basinData} showBasins={showBasins} />
 
-                {schools.filter(s => s.hasCoordinates).map((school) => (
+                {schools.filter(s => s.hasCoordinates || s.userLat).map((school) => (
                     <Marker
                         key={school.id}
-                        position={[school.latitude, school.longitude]}
+                        position={[school.userLat || school.latitude, school.userLng || school.longitude]}
                     >
                         <Popup>
                             <div className="text-navy p-1">

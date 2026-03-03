@@ -49,21 +49,86 @@ export default function SchoolDetailModal({ school, onClose }: SchoolDetailModal
                                 {t('schoolDetails')}
                             </h3>
                             <div className="space-y-4 text-sm">
-                                {!school.hasCoordinates && (
+                                {!school.hasCoordinates && !school.userLat && (
                                     <div className="p-3 bg-red-900/10 border border-red-500/20 rounded-sm">
                                         <div className="flex items-center gap-2 mb-1 text-red-400">
                                             <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span>
                                             <span className="text-[9px] font-bold uppercase tracking-wider">{t('needsCoordinates')}</span>
                                         </div>
-                                        <p className="text-[9px] text-cool-mist leading-relaxed uppercase tracking-[0.05em]">
+                                        <p className="text-[9px] text-cool-mist leading-relaxed uppercase tracking-[0.05em] mb-3">
                                             {t('coordConfidence')}
+                                        </p>
+                                        <a
+                                            href={`https://www.google.com/maps/search/${encodeURIComponent(`${school.name} ${school.address} ${school.municipality} ${school.state}`)}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-[10px] text-accent font-bold uppercase tracking-widest hover:underline flex items-center gap-2"
+                                        >
+                                            <span>{t('googleMapsSearch')}</span>
+                                            <span>↗</span>
+                                        </a>
+                                    </div>
+                                )}
+
+                                {(school.userLat || school.userLng) && (
+                                    <div className="p-3 bg-accent/10 border border-accent/20 rounded-sm">
+                                        <div className="flex items-center gap-2 mb-1 text-accent">
+                                            <span className="w-1.5 h-1.5 bg-accent rounded-full"></span>
+                                            <span className="text-[9px] font-bold uppercase tracking-wider">{t('userUpdated')}</span>
+                                        </div>
+                                        <p className="text-[9px] text-cool-mist leading-relaxed uppercase tracking-[0.05em]">
+                                            {t('adminVerification')}
                                         </p>
                                     </div>
                                 )}
+
                                 <div>
                                     <span className="text-cool-mist uppercase block text-[10px] tracking-wider mb-1">{t('address')}</span>
                                     <p>{school.address}, {school.neighborhood}</p>
                                 </div>
+
+                                <div className="pt-4 border-t border-border/10">
+                                    <h4 className="text-[10px] text-accent uppercase tracking-widest font-bold mb-3">{t('updateCoords')}</h4>
+                                    <form
+                                        className="grid grid-cols-2 gap-3"
+                                        onSubmit={(e) => {
+                                            e.preventDefault();
+                                            const formData = new FormData(e.currentTarget);
+                                            const lat = formData.get('lat');
+                                            const lng = formData.get('lng');
+                                            if (lat && lng) {
+                                                const updates = JSON.parse(localStorage.getItem('school_coord_updates') || '{}');
+                                                updates[school.id] = { lat: parseFloat(lat as string), lng: parseFloat(lng as string) };
+                                                localStorage.setItem('school_coord_updates', JSON.stringify(updates));
+                                                window.location.reload();
+                                            }
+                                        }}
+                                    >
+                                        <input
+                                            name="lat"
+                                            type="number"
+                                            step="any"
+                                            placeholder="Latitude"
+                                            defaultValue={school.userLat || (school.hasCoordinates ? school.latitude : '')}
+                                            className="bg-navy border border-border p-2 text-xs text-ice-white focus:border-accent outline-none"
+                                        />
+                                        <input
+                                            name="lng"
+                                            type="number"
+                                            step="any"
+                                            placeholder="Longitude"
+                                            defaultValue={school.userLng || (school.hasCoordinates ? school.longitude : '')}
+                                            className="bg-navy border border-border p-2 text-xs text-ice-white focus:border-accent outline-none"
+                                        />
+                                        <button
+                                            type="submit"
+                                            className="col-span-2 bg-accent/20 border border-accent/40 text-accent text-[10px] font-bold uppercase tracking-widest py-2 hover:bg-accent hover:text-navy transition-all"
+                                        >
+                                            {t('save')}
+                                        </button>
+                                    </form>
+                                </div>
+
                                 <div>
                                     <span className="text-cool-mist uppercase block text-[10px] tracking-wider mb-1">{t('municipality')}</span>
                                     <p>{school.municipality}, {school.state}</p>

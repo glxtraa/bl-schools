@@ -19,6 +19,9 @@ export interface School {
   lastUpdated: string;
   status: string;
   hasCoordinates: boolean;
+  userLat?: number;
+  userLng?: number;
+  needsVerification?: boolean;
   imageMetadata?: {
     dateTaken?: string;
     camera?: string;

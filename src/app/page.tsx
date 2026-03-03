@@ -23,7 +23,24 @@ function DashboardContent() {
   useEffect(() => {
     async function loadData() {
       const res = await fetch('/api/schools');
-      const data = await res.json();
+      let data: School[] = await res.json();
+
+      // Simulate persistence for demo
+      if (typeof window !== 'undefined') {
+        const updates = JSON.parse(localStorage.getItem('school_coord_updates') || '{}');
+        data = data.map(s => {
+          if (updates[s.id]) {
+            return {
+              ...s,
+              userLat: updates[s.id].lat,
+              userLng: updates[s.id].lng,
+              needsVerification: true
+            };
+          }
+          return s;
+        });
+      }
+
       setSchools(data);
     }
     loadData();

@@ -43,10 +43,21 @@ export default function SchoolList({ schools }: SchoolListProps) {
                                 {school.project || 'Project'}
                             </div>
                             <h3 className="text-xl font-bold mb-3 leading-tight">{school.name}</h3>
-                            {!school.hasCoordinates && (
+                            {!school.hasCoordinates && !school.userLat && (
                                 <div className="mb-4 inline-flex items-center gap-2 px-3 py-1 bg-red-900/20 border border-red-500/30 text-red-400 rounded-sm">
                                     <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span>
                                     <span className="text-[9px] font-bold uppercase tracking-wider">{t('needsCoordinates')}</span>
+                                </div>
+                            )}
+                            {(school.userLat || school.userLng) && (
+                                <div className="mb-4 flex flex-col gap-2">
+                                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-accent/20 border border-accent/30 text-accent rounded-sm w-fit">
+                                        <span className="w-1.5 h-1.5 bg-accent rounded-full"></span>
+                                        <span className="text-[9px] font-bold uppercase tracking-wider">{t('userUpdated')}</span>
+                                    </div>
+                                    <div className="px-3 py-1 bg-midnight-blue border border-border text-cool-mist text-[8px] font-bold uppercase tracking-widest w-fit">
+                                        {t('adminVerification')}
+                                    </div>
                                 </div>
                             )}
                             <p className="text-cool-mist text-xs mb-6 uppercase tracking-wider">
