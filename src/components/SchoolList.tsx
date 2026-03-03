@@ -2,15 +2,17 @@
 
 import { useState } from 'react';
 import { School } from '@/lib/types';
-import Image from 'next/image';
+import { useLanguage } from '@/lib/i18n';
+import SchoolDetailModal from './SchoolDetailModal';
 
 interface SchoolListProps {
     schools: School[];
-    onSchoolSelect?: (id: string) => void;
 }
 
-export default function SchoolList({ schools, onSchoolSelect }: SchoolListProps) {
+export default function SchoolList({ schools }: SchoolListProps) {
+    const { t } = useLanguage();
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
 
     const filteredSchools = schools.filter(school =>
         school.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -18,62 +20,71 @@ export default function SchoolList({ schools, onSchoolSelect }: SchoolListProps)
     );
 
     return (
-        <div className="flex flex-col gap-6">
-            <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold">Schools Directory</h2>
+        <div className="flex flex-col gap-8">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <h3 className="text-2xl font-bold uppercase tracking-tight">{t('allInstallations')}</h3>
                 <input
                     type="text"
-                    placeholder="Search schools or municipalities..."
-                    className="bg-midnight-blue border border-border p-2 px-4 text-ice-white focus:outline-none focus:border-accent w-full max-w-sm"
+                    placeholder={t('searchPlaceholder')}
+                    className="bg-dark-navy border border-border p-3 px-6 text-ice-white focus:outline-none focus:border-accent w-full md:max-w-md font-sans text-sm"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {filteredSchools.map((school) => (
                     <div
                         key={school.id}
-                        className="school-card cursor-pointer flex flex-col justify-between"
-                        onClick={() => onSchoolSelect?.(school.id)}
+                        className="school-card"
                     >
-                        <div>
-                            <div className="text-accent text-xs font-bold tracking-widest uppercase mb-2">
+                        <div className="flex-1">
+                            <div className="text-accent text-[10px] font-bold tracking-[0.2em] uppercase mb-4">
                                 {school.project || 'Project'}
                             </div>
-                            <h3 className="text-xl font-bold mb-2">{school.name}</h3>
-                            <p className="text-cool-mist text-sm mb-4 line-clamp-2">
-                                {school.address}, {school.municipality}, {school.state}
+                            <h3 className="text-xl font-bold mb-3 leading-tight">{school.name}</h3>
+                            <p className="text-cool-mist text-xs mb-6 uppercase tracking-wider">
+                                {school.municipality}, {school.state}
                             </p>
+
+                            <div className="flex items-center gap-4 mb-8">
+                                <div className="flex-1">
+                                    <p className="text-[10px] text-cool-mist uppercase tracking-[0.15em] mb-1">{t('meterReadingLabel')}</p>
+                                    <p className="text-2xl font-extrabold text-ice-white">{school.meterReading} <span className="text-xs font-normal text-cool-mist">m³</span></p>
+                                </div>
+                                {school.meterPhotoUrl && (
+                                    <div className="relative w-20 h-20 border border-border overflow-hidden">
+                                        <img
+                                            src={school.meterPhotoUrl}
+                                            alt="Meter"
+                                            className="object-cover w-full h-full"
+                                        />
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
-                        <div className="mt-4 pt-4 border-t border-border flex justify-between items-end">
-                            <div>
-                                <p className="text-xs text-cool-mist uppercase tracking-wider">Meter Reading</p>
-                                <p className="text-lg font-bold text-accent">{school.meterReading} m³</p>
-                            </div>
-                            {school.meterPhotoUrl ? (
-                                <div className="relative w-16 h-16 border border-border overflow-hidden">
-                                    <img
-                                        src={school.meterPhotoUrl}
-                                        alt="Meter"
-                                        className="object-cover w-full h-full"
-                                    />
-                                </div>
-                            ) : (
-                                <div className="w-16 h-16 bg-midnight-blue border border-border flex items-center justify-center text-[10px] text-cool-mist text-center leading-tight">
-                                    No Image
-                                </div>
-                            )}
-                        </div>
+                        <button
+                            onClick={() => setSelectedSchool(school)}
+                            className="btn-outline w-full text-xs font-bold tracking-widest hover:bg-ice-white hover:text-navy transition-colors py-3"
+                        >
+                            {t('viewDetails')}
+                        </button>
                     </div>
                 ))}
             </div>
 
             {filteredSchools.length === 0 && (
-                <div className="text-center py-20 text-cool-mist">
-                    No schools found matching your search.
+                <div className="text-center py-20 text-cool-mist uppercase tracking-widest text-xs">
+                    {t('noSchoolsFound')}
                 </div>
+            )}
+
+            {selectedSchool && (
+                <SchoolDetailModal
+                    school={selectedSchool}
+                    onClose={() => setSelectedSchool(null)}
+                />
             )}
         </div>
     );

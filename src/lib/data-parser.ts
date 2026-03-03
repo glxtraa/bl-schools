@@ -13,18 +13,30 @@ export async function getSchools(): Promise<School[]> {
             skipEmptyLines: true,
             complete: (results) => {
                 const schools: School[] = results.data.map((row: any, index: number) => {
-                    // Extract latitude and longitude
-                    let lat = parseFloat(row['_CAPTURA LA UBICACION_latitude'] || row['LATITUDE']);
-                    let lng = parseFloat(row['_CAPTURA LA UBICACION_longitude'] || row['LONGITUDE']);
+                    // 1. Try direct columns
+                    let lat = parseFloat(row['_CAPTURA LA UBICACION_latitude'] || row['LATITUDE'] || row['latitude']);
+                    let lng = parseFloat(row['_CAPTURA LA UBICACION_longitude'] || row['LONGITUDE'] || row['longitude']);
 
-                    // If still zero/NaN, try parsing the 'CAPTURA LA UBICACION' string which often has 'lat lng alt accuracy'
-                    if (!lat || !lng) {
+                    // 2. Try the composite 'CAPTURA LA UBICACION' string
+                    if (!lat || !lng || isNaN(lat) || isNaN(lng)) {
                         const locString = row['CAPTURA LA UBICACION'];
-                        if (locString) {
-                            const parts = locString.split(' ');
+                        if (locString && typeof locString === 'string') {
+                            const parts = locString.trim().split(/\s+/);
                             if (parts.length >= 2) {
                                 lat = parseFloat(parts[0]);
                                 lng = parseFloat(parts[1]);
+                            }
+                        }
+                    }
+
+                    // 3. Fallback: Scan all keys for anything containing 'latitude' or 'longitude'
+                    if (!lat || !lng || isNaN(lat) || isNaN(lng)) {
+                        for (const key in row) {
+                            if (key.toLowerCase().includes('latitude') && !isNaN(parseFloat(row[key]))) {
+                                lat = parseFloat(row[key]);
+                            }
+                            if (key.toLowerCase().includes('longitude') && !isNaN(parseFloat(row[key]))) {
+                                lng = parseFloat(row[key]);
                             }
                         }
                     }
@@ -35,17 +47,30 @@ export async function getSchools(): Promise<School[]> {
                         latitude: lat || 0,
                         longitude: lng || 0,
                         address: row['CALLE'] || '',
+                        neighborhood: row['COLONIA / LOCALIDAD'] || '',
                         municipality: row['TERRITORIAL / MUNICIPIO'] || '',
                         state: row['ESTADO'] || '',
+                        zipCode: row['CODIGO POSTAL'] || '',
                         meterPhotoUrl: row['FOTO DEL MEDIDOR_URL'] || '',
+                        receiptPhotoUrl: row['FOTO DE RECIBO DE SEGUIMIENTO_URL'] || '',
+                        visitPhotoUrl: row['FOTO DE LA VISITA MOSAC_URL'] || '',
+                        nectarPhotoUrl: row['FOTO DEL MEDIDOR DEL NECTAR_URL'] || '',
                         meterReading: row['LECTURA DEL MEDIDOR (EN M CUBICOS)'] || '0',
                         studentsTotal: parseInt(row['r_alumnos_total']) || 0,
                         staffTotal: parseInt(row['r_adultos_total']) || 0,
                         project: row['PROYECTO'] || '',
                         lastUpdated: row['FECHA DE SEGUIMIENTO'] || '',
                         status: row['ESTATUS*'] || 'Active',
+                        infrastructure: {
+                            cisternLiters: parseInt(row['¿QUE CAPACIDAD (LITRO)  DE ALMACENAMIENTO TIENE(N) LA(S) CISTERNA(S)?']) || 0,
+                            tinacoLiters: parseInt(row['almacen_tinaco_total']) || 0,
+                            totalLiters: parseInt(row['almacen_total']) || 0,
+                        },
+                        notes: row['DESCRIBE BREVEMENTE LA SITUACION DE AGUA EN LA ESCUELA'] || row['DESCRIBE LA SITUACION'] || '',
                     };
-                }).filter((s: School) => s.latitude !== 0 && s.longitude !== 0);
+                }).filter((s: School) => s.latitude !== 0 && s.longitude !== 0 && !isNaN(s.latitude));
+
+                console.log(`[DataParser] Loaded ${schools.length} schools with valid coordinates out of ${results.data.length} rows.`);
                 resolve(schools);
             },
             error: (error: any) => {
