@@ -4,7 +4,7 @@ import axios from 'axios';
 import AdmZip from 'adm-zip';
 import * as shapefile from 'shapefile';
 import * as turf from '@turf/turf';
-import { getSchools } from '../src/lib/data-parser.ts';
+import { getSchools } from '../src/lib/data-parser';
 
 const BASIN_URL = 'https://data.hydrosheds.org/file/hydrobasins/standard/hybas_na_lev06_v1c.zip';
 const TEMP_DIR = path.join(process.cwd(), 'temp_basins');
