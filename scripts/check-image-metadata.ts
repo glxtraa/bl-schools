@@ -22,7 +22,7 @@ async function checkMetadata() {
         } else {
             console.log('No EXIF metadata found.');
         }
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error fetching or parsing image:', error.message);
     }
 }
