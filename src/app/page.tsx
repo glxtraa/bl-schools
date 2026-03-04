@@ -15,33 +15,69 @@ const SchoolMap = dynamic(() => import('@/components/SchoolMap'), {
 
 import MapToggle from '@/components/MapToggle';
 
+import { analyzeRainDataFromIPFS } from '@/lib/rain-analyzer';
+
 function DashboardContent() {
   const { t } = useLanguage();
   const [schools, setSchools] = useState<School[]>([]);
   const [showBasins, setShowBasins] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function loadData() {
-      const res = await fetch('/api/schools');
-      let data: School[] = await res.json();
+      try {
+        const res = await fetch('/api/schools');
+        let data: School[] = await res.json();
 
-      // Simulate persistence for demo
-      if (typeof window !== 'undefined') {
-        const updates = JSON.parse(localStorage.getItem('school_coord_updates') || '{}');
-        data = data.map(s => {
-          if (updates[s.id]) {
-            return {
-              ...s,
-              userLat: updates[s.id].lat,
-              userLng: updates[s.id].lng,
-              needsVerification: true
-            };
+        // 1. Fetch IPFS Rain Data & Verify Integrity
+        try {
+          const registryRes = await fetch('/data/ipfs_registry.json');
+          const registry = await registryRes.json();
+          const dates = Object.keys(registry).sort().reverse();
+
+          if (dates.length > 0) {
+            const latestCid = registry[dates[0]];
+            const rainStats = await analyzeRainDataFromIPFS(latestCid);
+
+            data = data.map((s, idx) => {
+              // Priority 1: Direct ID match
+              let stats = rainStats[s.id];
+
+              // Priority 2: Demo fallback (Link first school to a known sensor from our log)
+              if (!stats && idx === 0) {
+                stats = rainStats['eca340c2-42f4-46ad-ae3f-60bb3397d9b3'];
+              }
+
+              if (stats) return { ...s, rainStats: stats };
+              return s;
+            });
           }
-          return s;
-        });
-      }
+        } catch (rainErr) {
+          console.warn('Rain data not available or verification failed:', rainErr);
+        }
 
-      setSchools(data);
+        // 2. Simulate persistence for demo
+        if (typeof window !== 'undefined') {
+          const updates = JSON.parse(localStorage.getItem('school_coord_updates') || '{}');
+          data = data.map(s => {
+            if (updates[s.id]) {
+              return {
+                ...s,
+                userLat: updates[s.id].lat,
+                userLng: updates[s.id].lng,
+                needsVerification: true
+              };
+            }
+            return s;
+          });
+        }
+
+        setSchools(data);
+      } catch (err) {
+        console.error('Failed to load schools:', err);
+      } finally {
+        setIsLoading(false);
+      }
     }
     loadData();
   }, []);

@@ -149,6 +149,35 @@ export default function SchoolDetailModal({ school, onClose }: SchoolDetailModal
                                         <p className="font-bold">{school.imageMetadata.dateTaken}</p>
                                     </div>
                                 )}
+
+                                {school.rainStats && (
+                                    <div className="pt-4 border-t border-border/10">
+                                        <div className="flex items-center justify-between mb-2">
+                                            <span className="text-accent uppercase block text-[10px] tracking-wider">{t('rainfallHistory')}</span>
+                                            {school.rainStats.isVerified ? (
+                                                <div className="flex items-center gap-1.5 px-2 py-0.5 bg-green-900/20 border border-green-500/30 text-green-400 rounded-full">
+                                                    <span className="w-1 h-1 bg-green-500 rounded-full"></span>
+                                                    <span className="text-[7px] font-bold uppercase tracking-tight">{t('verifiedByBlockchain')}</span>
+                                                </div>
+                                            ) : (
+                                                <div className="flex items-center gap-1.5 px-2 py-0.5 bg-red-900/20 border border-red-500/30 text-red-400 rounded-full">
+                                                    <span className="w-1 h-1 bg-red-500 rounded-full animate-ping"></span>
+                                                    <span className="text-[7px] font-bold uppercase tracking-tight">{t('integrityFailure')}</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-4 bg-midnight-blue/50 p-3 border border-border/10 rounded-sm">
+                                            <div>
+                                                <span className="text-cool-mist uppercase block text-[8px] tracking-widest mb-1">{t('totalRainfall')}</span>
+                                                <p className="text-xl font-bold text-ice-white">{school.rainStats.totalMillimeters.toFixed(2)} <span className="text-xs font-normal text-cool-mist">mm</span></p>
+                                            </div>
+                                            <div className="text-right">
+                                                <span className="text-cool-mist uppercase block text-[8px] tracking-widest mb-1">{t('lastUpdated')}</span>
+                                                <p className="text-[10px] text-ice-white font-mono">{school.rainStats.lastCatch}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
 

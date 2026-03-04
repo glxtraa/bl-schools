@@ -31,5 +31,10 @@ export interface School {
     tinacoLiters: number;
     totalLiters: number;
   };
+  rainStats?: {
+    totalMillimeters: number;
+    lastCatch: string;
+    isVerified: boolean;
+  };
   notes: string;
 }
