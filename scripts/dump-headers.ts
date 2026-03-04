@@ -7,7 +7,7 @@ const fileContent = fs.readFileSync(csvPath, 'utf8');
 Papa.parse(fileContent, {
     header: true,
     step: (results, parser) => {
-        console.log(JSON.stringify(Object.keys(results.data), null, 2));
+        console.log(JSON.stringify(Object.keys(results.data as any), null, 2));
         parser.abort();
     }
 });

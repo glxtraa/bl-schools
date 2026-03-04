@@ -6,7 +6,7 @@ const fileContent = fs.readFileSync(csvPath, 'utf8');
 
 Papa.parse(fileContent, {
     header: true,
-    complete: (results) => {
+    complete: (results: any) => {
         results.data.forEach((row: any) => {
             const name = row['NOMBRE DE LA ESCUELA / CENTRO COMUNITARIO*'];
             const uuid = row['_uuid'];
