@@ -27,18 +27,16 @@ def main():
         },
         {
           "type": "Feature",
-          "properties": { "HYBAS_ID": 7060073910, "PFAF_ID": 753240, "risk_class": 2, "school_count": 1, "schools": "BENITO JUAREZ" },
+          "properties": { "HYBAS_ID": 7060073910, "PFAF_ID": 753240, "risk_class": 3, "school_count": 6, "schools": "BENITO JUAREZ, ZAPATA, PREPA 271, VICENTE GUERRERO, IGNACIO ALLENDE, FLORES MAGON" },
           "geometry": {
             "type": "Polygon",
-            "coordinates": [[[-99.25, 19.55], [-99.1, 19.35], [-98.95, 19.45], [-98.85, 19.6], [-98.95, 19.75], [-99.15, 19.8], [-99.3, 19.7], [-99.25, 19.55]]]
-          }
-        },
-        {
-          "type": "Feature",
-          "properties": { "HYBAS_ID": 7060073920, "PFAF_ID": 753250, "risk_class": 3, "school_count": 5, "schools": "ZAPATA, PREPA 271, VICENTE GUERRERO, IGNACIO ALLENDE, FLORES MAGON" },
-          "geometry": {
-            "type": "Polygon",
-            "coordinates": [[[-99.15, 19.25], [-99.0, 19.05], [-98.8, 18.95], [-98.65, 19.1], [-98.6, 19.25], [-98.7, 19.45], [-98.85, 19.55], [-99.05, 19.45], [-99.15, 19.25]]]
+            "coordinates": [[
+              [-99.20, 20.15], [-99.00, 20.20], [-98.80, 20.10], [-98.60, 20.00], 
+              [-98.40, 19.90], [-98.30, 19.75], [-98.40, 19.55], [-98.55, 19.45], 
+              [-98.50, 19.25], [-98.60, 19.10], [-98.55, 18.95], [-98.80, 18.90], 
+              [-99.10, 19.00], [-99.35, 19.10], [-99.45, 19.25], [-99.40, 19.50], 
+              [-99.50, 19.70], [-99.40, 19.85], [-99.30, 20.00], [-99.20, 20.15]
+            ]]
           }
         }
       ]
