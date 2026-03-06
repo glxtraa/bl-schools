@@ -2,28 +2,35 @@ import json
 import os
 
 def main():
-    print("Running HydroBASINS extraction (High-Fidelity Python mock)...")
+    print("Running HydroBASINS extraction (ID Precision Python mock)...")
     
     geojson_path = 'public/data/hydrobasins_l6_schools.geojson'
     
-    # 1. Google/Guadalajara Basin (Provider Location context)
+    # 1. Google/Guadalajara Basin
     basin_gdl = [[-103.55, 20.55], [-103.4, 20.45], [-103.25, 20.48], [-103.1, 20.42], [-103.05, 20.55], [-103.1, 20.7], [-103.15, 20.85], [-103.35, 21.05], [-103.55, 20.95], [-103.7, 20.85], [-103.75, 20.7], [-103.55, 20.55]]
     
     # 2. AWS/Microsoft Queretaro Basin
     basin_qro = [[-100.65, 20.55], [-100.45, 20.42], [-100.25, 20.45], [-100.1, 20.52], [-100.05, 20.65], [-100.1, 20.8], [-100.2, 20.95], [-100.4, 21.02], [-100.6, 20.95], [-100.75, 20.8], [-100.7, 20.65], [-100.65, 20.55]]
     
-    # 3. Valley of Mexico - North (Ecatepec/Pachuca region)
+    # 3. Valley of Mexico - North (Ecatepec/Pachuca region) - HYBAS_ID 7060073920
     basin_vm_north = [
         [-99.20, 20.15], [-99.00, 20.20], [-98.80, 20.10], [-98.60, 20.00], 
         [-98.40, 19.90], [-98.30, 19.75], [-98.40, 19.55], [-98.70, 19.45], 
         [-99.00, 19.50], [-99.30, 19.60], [-99.40, 19.85], [-99.30, 20.00], [-99.20, 20.15]
     ]
 
-    # 4. Valley of Mexico - South (Chalco/Amecameca/Xico region)
-    basin_vm_south = [
+    # 4. Valley of Mexico - Central-South (Chalco/Xico region) - HYBAS_ID 7060073910
+    # Now 4 schools
+    basin_vm_central_south = [
         [-99.00, 19.50], [-98.70, 19.45], [-98.55, 19.45], [-98.50, 19.25], 
-        [-98.60, 19.10], [-98.55, 18.95], [-98.80, 18.90], [-99.10, 19.00], 
-        [-99.35, 19.10], [-99.45, 19.25], [-99.15, 19.45], [-99.00, 19.50]
+        [-98.85, 19.35], [-99.15, 19.45], [-99.00, 19.50]
+    ]
+
+    # 5. Valley of Mexico - Far-South (Amecameca region) - HYBAS_ID 7060854410
+    # Contains Prepa 271
+    basin_vm_far_south = [
+        [-99.00, 19.35], [-98.50, 19.25], [-98.60, 19.10], [-98.55, 18.95], 
+        [-98.80, 18.90], [-99.10, 19.00], [-99.35, 19.10], [-99.00, 19.35]
     ]
     
     mock_geojson = {
@@ -41,13 +48,18 @@ def main():
         },
         {
           "type": "Feature",
-          "properties": { "HYBAS_ID": 7060073910, "PFAF_ID": 753240, "risk_class": 3, "school_count": 1, "schools": "BENITO JUAREZ" },
+          "properties": { "HYBAS_ID": 7060073920, "PFAF_ID": 753250, "risk_class": 2, "school_count": 1, "schools": "BENITO JUAREZ" },
           "geometry": { "type": "Polygon", "coordinates": [basin_vm_north] }
         },
         {
           "type": "Feature",
-          "properties": { "HYBAS_ID": 7060073920, "PFAF_ID": 753250, "risk_class": 4, "school_count": 5, "schools": "ZAPATA, PREPA 271, VICENTE GUERRERO, IGNACIO ALLENDE, FLORES MAGON" },
-          "geometry": { "type": "Polygon", "coordinates": [basin_vm_south] }
+          "properties": { "HYBAS_ID": 7060073910, "PFAF_ID": 753240, "risk_class": 4, "school_count": 4, "schools": "ZAPATA, VICENTE GUERRERO, IGNACIO ALLENDE, FLORES MAGON" },
+          "geometry": { "type": "Polygon", "coordinates": [basin_vm_central_south] }
+        },
+        {
+          "type": "Feature",
+          "properties": { "HYBAS_ID": 7060854410, "PFAF_ID": 771260, "risk_class": 5, "school_count": 1, "schools": "PREPARATORIA OFICIAL NO 271" },
+          "geometry": { "type": "Polygon", "coordinates": [basin_vm_far_south] }
         }
       ]
     }

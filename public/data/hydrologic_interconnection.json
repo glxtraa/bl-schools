@@ -23,7 +23,7 @@
             }
         ]
     },
-    "7060073910": {
+    "7060073920": {
         "shared_aquifer_risk": false,
         "transfer_system_dependent": true,
         "summary": "Zumpango-Ecatepec Northeast region. High-pressure urban corridor with significant hydrologic stress due to the Cutzamala system dependency.",
@@ -35,7 +35,7 @@
             }
         ]
     },
-    "7060073920": {
+    "7060073910": {
         "shared_aquifer_risk": true,
         "transfer_system_dependent": false,
         "summary": "Chalco-Amecameca South Basin. Primarily dependent on mountain springs and glacier-derived recharge from the Popocatepetl watershed.",
