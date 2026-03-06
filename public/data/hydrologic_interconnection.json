@@ -22,5 +22,29 @@
                 "url": "https://ceaqueretaro.gob.mx/"
             }
         ]
+    },
+    "7060073910": {
+        "shared_aquifer_risk": false,
+        "transfer_system_dependent": true,
+        "summary": "Ecatepec North Basin. Experiences high pressure due to urban density and relies on the Cutzamala system for high-altitude distribution.",
+        "sources": [
+            {
+                "title": "Ecatepec Water Management Plan",
+                "type": "Official Document",
+                "url": "#"
+            }
+        ]
+    },
+    "7060073920": {
+        "shared_aquifer_risk": true,
+        "transfer_system_dependent": false,
+        "summary": "Chalco-Amecameca South Basin. Primarily dependent on local glacial recharge and mountain springs. Vulnerable to seasonal variability.",
+        "sources": [
+            {
+                "title": "Amecameca Hydrologic Study",
+                "type": "Research Paper",
+                "url": "#"
+            }
+        ]
     }
 }
