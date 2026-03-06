@@ -14,6 +14,9 @@ const SchoolMap = dynamic(() => import('@/components/SchoolMap'), {
 });
 
 import MapToggle from '@/components/MapToggle';
+import Legend from '@/components/Legend';
+import InterconnectionCard from '@/components/InterconnectionCard';
+import AggregatedMetrics from '@/components/AggregatedMetrics';
 
 import { analyzeRainDataFromIPFS } from '@/lib/rain-analyzer';
 
@@ -21,9 +24,18 @@ function DashboardContent() {
   const { t } = useLanguage();
   const [schools, setSchools] = useState<School[]>([]);
   const [showBasins, setShowBasins] = useState(false);
+  const [showDatacenters, setShowDatacenters] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<'map' | 'metrics'>('map');
+  const [basinData, setBasinData] = useState<any>(null);
 
   useEffect(() => {
+    // Fetch Basin Data for synchronization
+    fetch('/data/hydrobasins_l6_schools.geojson')
+      .then(res => res.json())
+      .then(data => setBasinData(data))
+      .catch(err => console.error('Basin data fetch error:', err));
+
     async function loadData() {
       try {
         const res = await fetch('/api/schools');
@@ -108,22 +120,68 @@ function DashboardContent() {
         <p className="text-cool-mist text-lg md:text-xl max-w-3xl leading-relaxed">
           {t('description')}
         </p>
+
+        {/* Tab Navigation */}
+        <div className="flex gap-8 mt-12 border-b border-border/20">
+          <button
+            onClick={() => setActiveTab('map')}
+            className={`pb-4 text-xs font-bold uppercase tracking-[0.2em] transition-all relative ${activeTab === 'map' ? 'text-accent' : 'text-cool-mist hover:text-white'
+              }`}
+          >
+            {t('schoolsMap')}
+            {activeTab === 'map' && <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-accent"></div>}
+          </button>
+          <button
+            onClick={() => setActiveTab('metrics')}
+            className={`pb-4 text-xs font-bold uppercase tracking-[0.2em] transition-all relative ${activeTab === 'metrics' ? 'text-accent' : 'text-cool-mist hover:text-white'
+              }`}
+          >
+            {t('detailedMetrics').split('—')[1].trim()}
+            {activeTab === 'metrics' && <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-accent"></div>}
+          </button>
+        </div>
       </header>
 
-      <section className="mb-24">
-        <div className="flex justify-between items-end mb-8">
-          <div>
-            <div className="text-accent text-xs font-bold tracking-[0.25em] uppercase mb-3">{t('geographicDistribution')}</div>
-            <h2 className="text-4xl font-extrabold uppercase tracking-tight">{t('schoolsMap')}</h2>
+      {activeTab === 'map' ? (
+        <section className="mb-24 animate-in fade-in duration-700">
+          <div className="flex justify-between items-end mb-8">
+            <div>
+              <div className="text-accent text-xs font-bold tracking-[0.25em] uppercase mb-3">{t('geographicDistribution')}</div>
+              <h2 className="text-4xl font-extrabold uppercase tracking-tight">{t('schoolsMap')}</h2>
+            </div>
+            <div className="flex gap-4">
+              <MapToggle
+                active={showDatacenters}
+                onToggle={setShowDatacenters}
+                label={t('showDatacenters')}
+              />
+              <MapToggle
+                active={showBasins}
+                onToggle={setShowBasins}
+                label={t('showBasins')}
+              />
+            </div>
           </div>
-          <MapToggle
-            active={showBasins}
-            onToggle={setShowBasins}
-            label={t('es') === 'Mapa' ? 'Mostrar Cuencas' : 'Show Basins'}
-          />
-        </div>
-        <SchoolMap schools={schools} showBasins={showBasins} />
-      </section>
+
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div className="lg:col-span-3">
+              <SchoolMap schools={schools} showBasins={showBasins} showDatacenters={showDatacenters} />
+            </div>
+            <div className="space-y-6">
+              <Legend />
+              <InterconnectionCard />
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section className="mb-24 animate-in slide-in-from-bottom-4 duration-700">
+          <div className="mb-8">
+            <div className="text-accent text-xs font-bold tracking-[0.25em] uppercase mb-3 text-center">{t('detailedMetrics')}</div>
+            <h2 className="text-4xl font-extrabold uppercase tracking-tight text-center">{t('basinAggregation')}</h2>
+          </div>
+          <AggregatedMetrics schools={schools} basinData={basinData} />
+        </section>
+      )}
 
       <section>
         <SchoolList schools={schools} />

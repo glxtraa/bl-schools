@@ -52,6 +52,16 @@ const translations: Translations = {
     visitPhoto: { en: "Site Visit Photo", es: "Foto de la Visita" },
     nectarPhoto: { en: "Nectar Photo", es: "Foto del Nectar" },
     footerTagline: { en: "The Standard for Water Sustainability", es: "El Estándar para la Sostenibilidad del Agua" },
+    showDatacenters: { en: "Show Data Centers", es: "Mostrar Centros de Datos" },
+    showBasins: { en: "Show Basins", es: "Mostrar Cuencas" },
+    riskLow: { en: "Low", es: "Bajo" },
+    riskMedium: { en: "Medium", es: "Medio" },
+    riskHigh: { en: "High", es: "Alto" },
+    incrementalUsage: { en: "Incremental Usage", es: "Uso Incremental" },
+    cumulativeUsage: { en: "Cumulative Usage", es: "Uso Acumulado" },
+    basinAggregation: { en: "Basin Aggregation", es: "Agregación por Cuenca" },
+    unidentifiedBasin: { en: "Unidentified Basin", es: "Cuenca no identificada" },
+    assumptionsNote: { en: "Aggregation based on school visit history. Incremental usage calculated as the difference between consecutive readings.", es: "Agregación basada en el historial de visitas escolares. El uso incremental se calcula como la diferencia entre lecturas consecutivas." },
 };
 
 interface LanguageContextType {

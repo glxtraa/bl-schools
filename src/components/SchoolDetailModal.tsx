@@ -204,6 +204,39 @@ export default function SchoolDetailModal({ school, onClose }: SchoolDetailModal
                                     </div>
                                 )}
                             </div>
+
+                            <div className="mt-8 pt-6 border-t border-border">
+                                <h3 className="text-accent text-xs font-bold tracking-widest uppercase mb-4">
+                                    Risk Profile
+                                </h3>
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-4">
+                                        <div className={`text-2xl font-black ${school.riskLevel === 'high' ? 'text-red-500' :
+                                                school.riskLevel === 'medium' ? 'text-orange-500' : 'text-green-500'
+                                            }`}>
+                                            {school.riskScore}
+                                            <span className="text-xs font-normal text-cool-mist"> / 100</span>
+                                        </div>
+                                        <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${school.riskLevel === 'high' ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
+                                                school.riskLevel === 'medium' ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20' :
+                                                    'bg-green-500/10 text-green-400 border border-green-500/20'
+                                            }`}>
+                                            {school.riskLevel} Risk
+                                        </div>
+                                    </div>
+
+                                    {school.riskReasons && school.riskReasons.length > 0 && (
+                                        <ul className="space-y-2">
+                                            {school.riskReasons.map((reason, i) => (
+                                                <li key={i} className="flex items-start gap-2 text-[11px] text-cool-mist">
+                                                    <span className="text-accent">•</span>
+                                                    {reason}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     </div>
 

@@ -1,0 +1,26 @@
+{
+    "7060451": {
+        "shared_aquifer_risk": true,
+        "transfer_system_dependent": true,
+        "summary": "This basin shares the Lerma-Chapala-Santiago aquifer system, which is categorized as overexploited. It is highly dependent on the Cutzamala transfer system for urban supply.",
+        "sources": [
+            {
+                "title": "CONAGUA Aquifer Availability 2023",
+                "type": "Official Report",
+                "url": "https://www.gob.mx/conagua/documentos/disponibilidad-de-aguas-subterraneas"
+            }
+        ]
+    },
+    "7060482": {
+        "shared_aquifer_risk": true,
+        "transfer_system_dependent": false,
+        "summary": "Primarily dependent on deep wells within the Queretaro aquifer. Rapid industrial growth has increased the stress on local groundwater reserves.",
+        "sources": [
+            {
+                "title": "State of Queretaro Water Commission Communique",
+                "type": "Official Website",
+                "url": "https://ceaqueretaro.gob.mx/"
+            }
+        ]
+    }
+}

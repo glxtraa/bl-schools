@@ -13,8 +13,10 @@ export interface School {
   visitPhotoUrl: string;
   nectarPhotoUrl: string;
   meterReading: string;
+  index: string;
   studentsTotal: number;
   staffTotal: number;
+  meterId: string;
   project: string;
   lastUpdated: string;
   status: string;
@@ -37,4 +39,7 @@ export interface School {
     isVerified: boolean;
   };
   notes: string;
+  riskScore?: number;
+  riskLevel?: 'low' | 'medium' | 'high';
+  riskReasons?: string[];
 }

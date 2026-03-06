@@ -60,9 +60,18 @@ export default function SchoolList({ schools }: SchoolListProps) {
                                     </div>
                                 </div>
                             )}
-                            <p className="text-cool-mist text-xs mb-6 uppercase tracking-wider">
+                            <p className="text-cool-mist text-xs mb-4 uppercase tracking-wider">
                                 {school.municipality}, {school.state}
                             </p>
+
+                            {school.riskScore !== undefined && (
+                                <div className={`mb-6 inline-flex items-center gap-2 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest ${school.riskLevel === 'high' ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
+                                        school.riskLevel === 'medium' ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20' :
+                                            'bg-green-500/10 text-green-400 border border-green-500/20'
+                                    }`}>
+                                    Risk: {school.riskLevel} (${school.riskScore}/100)
+                                </div>
+                            )}
 
                             <div className="flex items-center gap-4 mb-8">
                                 <div className="flex-1">

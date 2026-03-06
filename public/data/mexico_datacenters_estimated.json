@@ -1,0 +1,35 @@
+[
+    {
+        "provider": "Google",
+        "region": "Mexico (Central)",
+        "latitude": 20.6736,
+        "longitude": -103.3440,
+        "basin_id": "7060451",
+        "in_school_basin": true,
+        "announcement_source": "Google Cloud Blog",
+        "disclosure_link": "https://www.gstatic.com/charity/Google_2023_Water_Stewardship_Report.pdf",
+        "water_usage": "Medium"
+    },
+    {
+        "provider": "AWS",
+        "region": "Mexico (Central)",
+        "latitude": 20.5888,
+        "longitude": -100.3899,
+        "basin_id": "7060482",
+        "in_school_basin": false,
+        "announcement_source": "AWS Announcements",
+        "disclosure_link": "https://sustain.aboutamazon.com/water",
+        "water_usage": "High"
+    },
+    {
+        "provider": "Microsoft",
+        "region": "Mexico (Central)",
+        "latitude": 20.6128,
+        "longitude": -100.4128,
+        "basin_id": "7060482",
+        "in_school_basin": false,
+        "announcement_source": "Microsoft Sustainability Report",
+        "disclosure_link": "https://www.microsoft.com/en-us/corporate-responsibility/sustainability/reports",
+        "water_usage": "Medium"
+    }
+]
