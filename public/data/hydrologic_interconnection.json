@@ -38,7 +38,19 @@
     "7060073910": {
         "shared_aquifer_risk": true,
         "transfer_system_dependent": false,
-        "summary": "Chalco-Amecameca South Basin. Primarily dependent on mountain springs and glacier-derived recharge from the Popocatepetl watershed.",
+        "summary": "Chalco-Xico region. Characterized by seasonal surface water captures and high dependency on local groundwater for urban fringes.",
+        "sources": [
+            {
+                "title": "Chalco Water Management Study",
+                "type": "Technical Report",
+                "url": "#"
+            }
+        ]
+    },
+    "7060854410": {
+        "shared_aquifer_risk": true,
+        "transfer_system_dependent": false,
+        "summary": "Amecameca Far-South Basin. High-altitude watershed with direct recharge from the Popocatepetl glacier. Critical mountain spring ecosystem.",
         "sources": [
             {
                 "title": "Amecameca Hydrologic Impact Study",

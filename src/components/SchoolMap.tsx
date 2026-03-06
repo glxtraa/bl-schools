@@ -136,10 +136,11 @@ export default function SchoolMap({ schools, showBasins = false, showDatacenters
         console.log(`[SchoolMap] Styling Basin ${hybasId}, Risk Class: ${riskClass}`);
 
         return {
-            color: '#ffffff',
-            weight: 1,
-            fillColor: RISK_COLORS[riskClass as keyof typeof RISK_COLORS] || '#2196f3',
-            fillOpacity: 0.4,
+            color: '#d32f2f', // Natural red outline
+            weight: 2,
+            dashArray: '5, 8', // Natural dashed look from reference
+            fillColor: RISK_COLORS[riskClass as keyof typeof RISK_COLORS] || '#f44336',
+            fillOpacity: 0.25,
         };
     };
 
