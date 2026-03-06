@@ -11,18 +11,26 @@ const mockGeoJSON = {
   "features": [
     {
       "type": "Feature",
-      "properties": { "HYBAS_ID": 7060451, "PFAF_ID": 762410, "risk_class": 3 },
+      "properties": { "HYBAS_ID": 7060451, "PFAF_ID": 762410, "risk_class": 3, "school_count": 0, "schools": "" },
       "geometry": {
         "type": "Polygon",
-        "coordinates": [[[-99.1, 19.4], [-99.2, 19.4], [-99.2, 19.5], [-99.1, 19.5], [-99.1, 19.4]]]
+        "coordinates": [[[-103.5, 20.5], [-103.2, 20.5], [-103.2, 20.8], [-103.5, 20.8], [-103.5, 20.5]]]
       }
     },
     {
       "type": "Feature",
-      "properties": { "HYBAS_ID": 7060482, "PFAF_ID": 762420, "risk_class": 4 },
+      "properties": { "HYBAS_ID": 7060482, "PFAF_ID": 762420, "risk_class": 4, "school_count": 0, "schools": "" },
       "geometry": {
         "type": "Polygon",
-        "coordinates": [[[-100.4, 20.6], [-100.5, 20.6], [-100.5, 20.7], [-100.4, 20.7], [-100.4, 20.6]]]
+        "coordinates": [[[-100.5, 20.5], [-100.2, 20.5], [-100.2, 20.8], [-100.5, 20.8], [-100.5, 20.5]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "HYBAS_ID": 7060073910, "PFAF_ID": 753240, "risk_class": 2, "school_count": 4, "schools": "SECUNDARIA, PRIMARIA, etc" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[-98.5, 19.8], [-98.2, 19.8], [-98.2, 20.1], [-98.5, 20.1], [-98.5, 19.8]]]
       }
     }
   ]
@@ -31,7 +39,3 @@ const mockGeoJSON = {
 if (!fs.existsSync('public/data')) fs.mkdirSync('public/data', { recursive: true });
 fs.writeFileSync(geojsonPath, JSON.stringify(mockGeoJSON, null, 2));
 console.log('Created ' + geojsonPath);
-
-const dcGeojsonPath = 'public/data/hydrobasins_l6_datacenters.geojson';
-fs.writeFileSync(dcGeojsonPath, JSON.stringify(mockGeoJSON, null, 2));
-console.log('Created ' + dcGeojsonPath);

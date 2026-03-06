@@ -1,0 +1,46 @@
+import json
+import os
+
+def main():
+    print("Running HydroBASINS extraction (Python mock)...")
+    
+    geojson_path = 'public/data/hydrobasins_l6_schools.geojson'
+    
+    mock_geojson = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": { "HYBAS_ID": 7060451, "PFAF_ID": 762410, "risk_class": 3, "school_count": 0, "schools": "" },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [[[-103.5, 20.5], [-103.2, 20.5], [-103.2, 20.8], [-103.5, 20.8], [-103.5, 20.5]]]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": { "HYBAS_ID": 7060482, "PFAF_ID": 762420, "risk_class": 4, "school_count": 0, "schools": "" },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [[[-100.5, 20.5], [-100.2, 20.5], [-100.2, 20.8], [-100.5, 20.8], [-100.5, 20.5]]]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": { "HYBAS_ID": 7060073910, "PFAF_ID": 753240, "risk_class": 2, "school_count": 4, "schools": "SECUNDARIA, PRIMARIA, etc" },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [[[-98.5, 19.8], [-98.2, 19.8], [-98.2, 20.1], [-98.5, 20.1], [-98.5, 19.8]]]
+          }
+        }
+      ]
+    }
+
+    os.makedirs('public/data', exist_ok=True)
+    with open(geojson_path, 'w') as f:
+        json.dump(mock_geojson, f, indent=2)
+    
+    print(f"Created {geojson_path}")
+
+if __name__ == "__main__":
+    main()
