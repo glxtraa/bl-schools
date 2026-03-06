@@ -62,6 +62,18 @@ const translations: Translations = {
     basinAggregation: { en: "Basin Aggregation", es: "Agregación por Cuenca" },
     unidentifiedBasin: { en: "Unidentified Basin", es: "Cuenca no identificada" },
     assumptionsNote: { en: "Aggregation based on school visit history. Incremental usage calculated as the difference between consecutive readings.", es: "Agregación basada en el historial de visitas escolares. El uso incremental se calcula como la diferencia entre lecturas consecutivas." },
+    basin: { en: "Basin", es: "Cuenca" },
+    hydrologicInterconnection: { en: "Hydrologic Interconnection", es: "Interconexión Hidrológica" },
+    aquiferRisk: { en: "Aquifer Risk", es: "Riesgo de Acuífero" },
+    transferDep: { en: "Transfer Dep.", es: "Dep. Transferencia" },
+    aqueductRiskClass: { en: "Aqueduct Risk Class", es: "Clase de Riesgo Aqueduct" },
+    aqueductRiskProfile: { en: "Aqueduct Risk Profile", es: "Perfil de Riesgo Aqueduct" },
+    mapMarkers: { en: "Map Markers", es: "Marcadores del Mapa" },
+    schoolMonitoringPoint: { en: "School / Monitoring Point", es: "Escuela / Punto de Monitoreo" },
+    low: { en: "Low", es: "Bajo" },
+    extreme: { en: "Extreme", es: "Extremo" },
+    schoolsCount: { en: "Schools", es: "Escuelas" },
+    overallRisk: { en: "Overall Risk", es: "Riesgo General" },
 };
 
 interface LanguageContextType {

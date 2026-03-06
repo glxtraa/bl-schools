@@ -9,17 +9,17 @@ export default function LanguageSwitcher() {
         <div className="flex gap-2">
             <button
                 onClick={() => setLanguage('en')}
-                className={`px-3 py-1 text-xs font-bold uppercase tracking-widest border border-border transition-colors ${language === 'en' ? 'bg-accent text-navy border-accent' : 'text-cool-mist hover:text-ice-white'
+                className={`px-3 py-1 text-[10px] font-bold uppercase tracking-widest border border-border transition-colors ${language === 'en' ? 'bg-accent text-navy border-accent' : 'text-cool-mist hover:text-ice-white'
                     }`}
             >
-                EN
+                English
             </button>
             <button
                 onClick={() => setLanguage('es')}
-                className={`px-3 py-1 text-xs font-bold uppercase tracking-widest border border-border transition-colors ${language === 'es' ? 'bg-accent text-navy border-accent' : 'text-cool-mist hover:text-ice-white'
+                className={`px-3 py-1 text-[10px] font-bold uppercase tracking-widest border border-border transition-colors ${language === 'es' ? 'bg-accent text-navy border-accent' : 'text-cool-mist hover:text-ice-white'
                     }`}
             >
-                ES
+                Español
             </button>
         </div>
     );

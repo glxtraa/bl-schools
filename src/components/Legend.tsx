@@ -16,7 +16,7 @@ export default function Legend() {
     return (
         <div className="bg-midnight-blue/40 backdrop-blur-md rounded-xl p-4 border border-border/20 shadow-2xl space-y-4">
             <div>
-                <h4 className="text-[10px] font-bold text-accent uppercase tracking-widest mb-3">Aqueduct Risk Class</h4>
+                <h4 className="text-[10px] font-bold text-accent uppercase tracking-widest mb-3">{t('aqueductRiskClass')}</h4>
                 <div className="flex items-center gap-1">
                     {riskClasses.map((item) => (
                         <div key={item.level} className="group relative flex-1">
@@ -25,23 +25,23 @@ export default function Legend() {
                                 style={{ backgroundColor: item.color }}
                             />
                             <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-navy text-[8px] px-1 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-border/20">
-                                {item.label} (${item.level})
+                                {t(`risk${item.label.replace('-', '')}`)} ({item.level})
                             </div>
                         </div>
                     ))}
                 </div>
                 <div className="flex justify-between mt-1 text-[8px] text-cool-mist font-medium">
-                    <span>LOW</span>
-                    <span>EXTREME</span>
+                    <span>{t('low')}</span>
+                    <span>{t('extreme')}</span>
                 </div>
             </div>
 
             <div>
-                <h4 className="text-[10px] font-bold text-accent uppercase tracking-widest mb-3">Map Markers</h4>
+                <h4 className="text-[10px] font-bold text-accent uppercase tracking-widest mb-3">{t('mapMarkers')}</h4>
                 <div className="space-y-2">
                     <div className="flex items-center gap-2">
                         <div className="w-2.5 h-2.5 rounded-full bg-core-blue border border-white" />
-                        <span className="text-[10px] text-cool-mist">School / Monitoring Point</span>
+                        <span className="text-[10px] text-cool-mist">{t('schoolMonitoringPoint')}</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <div className="w-2.5 h-2.5 rounded-full bg-[#4285F4] border border-white" />
