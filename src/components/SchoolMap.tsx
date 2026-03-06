@@ -40,11 +40,11 @@ function MapController({ geojson, showBasins }: { geojson: any, showBasins: bool
 }
 
 const RISK_COLORS: Record<number, string> = {
-    0: '#c5e1a5', // Low
-    1: '#fff59d', // Low-Medium
-    2: '#ffcc80', // Medium-High
-    3: '#ff8a65', // High
-    4: '#d32f2f', // Extremely High
+    0: '#ffff00', // Low (Yellow)
+    1: '#ffe600', // Low-Medium
+    2: '#ff9900', // Medium-High
+    3: '#ff1900', // High (Red)
+    4: '#990000', // Extremely High (Dark Red)
 };
 
 const PROVIDER_COLORS: Record<string, string> = {

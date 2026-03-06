@@ -6,11 +6,11 @@ export default function Legend() {
     const { t } = useLanguage();
 
     const riskClasses = [
-        { level: 0, color: '#c5e1a5', label: 'Low' },
-        { level: 1, color: '#fff59d', label: 'Low-Medium' },
-        { level: 2, color: '#ffcc80', label: 'Medium-High' },
-        { level: 3, color: '#ff8a65', label: 'High' },
-        { level: 4, color: '#d32f2f', label: 'Extremely High' },
+        { level: 0, color: '#ffff00', label: 'Low' },
+        { level: 1, color: '#ffe600', label: 'Low-Medium' },
+        { level: 2, color: '#ff9900', label: 'Medium-High' },
+        { level: 3, color: '#ff1900', label: 'High' },
+        { level: 4, color: '#990000', label: 'Extremely High' },
     ];
 
     return (
