@@ -24,17 +24,33 @@ interface SchoolMapProps {
 }
 
 // Component to handle map view updates
-function MapController({ geojson, showBasins }: { geojson: any, showBasins: boolean }) {
+function MapController({ geojson, showBasins, datacenters, showDatacenters }: { geojson: any, showBasins: boolean, datacenters: any[], showDatacenters: boolean }) {
     const map = useMap();
 
     useEffect(() => {
-        if (showBasins && geojson && geojson.features.length > 0) {
-            const bounds = L.geoJSON(geojson).getBounds();
-            if (bounds.isValid()) {
-                map.fitBounds(bounds, { padding: [50, 50], animate: true });
+        const bounds = L.latLngBounds([]);
+        let hasBounds = false;
+
+        if (showBasins && geojson && geojson.features && geojson.features.length > 0) {
+            const basinBounds = L.geoJSON(geojson).getBounds();
+            if (basinBounds.isValid()) {
+                bounds.extend(basinBounds);
+                hasBounds = true;
             }
         }
-    }, [showBasins, geojson, map]);
+
+        if (showDatacenters && datacenters && datacenters.length > 0) {
+            datacenters.forEach(dc => {
+                bounds.extend([dc.latitude, dc.longitude]);
+            });
+            hasBounds = true;
+        }
+
+        if (hasBounds) {
+            console.log('[MapController] Fitting bounds to shown layers');
+            map.fitBounds(bounds, { padding: [50, 50], animate: true });
+        }
+    }, [showBasins, geojson, showDatacenters, datacenters, map]);
 
     return null;
 }
@@ -56,9 +72,9 @@ const PROVIDER_COLORS: Record<string, string> = {
 // Custom Marker Icons for Data Centers
 const getDCIcon = (provider: string) => L.divIcon({
     className: 'custom-dc-marker',
-    html: `<div style="background-color: ${PROVIDER_COLORS[provider] || '#777'}; width: 12px; height: 12px; border: 2px solid white; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.5);"></div>`,
-    iconSize: [12, 12],
-    iconAnchor: [6, 6],
+    html: `<div style="background-color: ${PROVIDER_COLORS[provider] || '#777'}; width: 18px; height: 18px; border: 3px solid white; border-radius: 50%; box-shadow: 0 0 8px rgba(0,0,0,0.6);"></div>`,
+    iconSize: [18, 18],
+    iconAnchor: [9, 9],
 });
 
 export default function SchoolMap({ schools, showBasins = false, showDatacenters = false }: SchoolMapProps) {
@@ -83,7 +99,10 @@ export default function SchoolMap({ schools, showBasins = false, showDatacenters
         // Fetch Datacenters
         fetch('/data/mexico_datacenters_estimated.json')
             .then(res => res.json())
-            .then(data => setDcData(data))
+            .then(data => {
+                console.log('[SchoolMap] Loaded Datacenters:', data.length);
+                setDcData(data);
+            })
             .catch(err => console.error('Datacenters not found:', err));
 
         // Fetch Risk Data
@@ -98,6 +117,10 @@ export default function SchoolMap({ schools, showBasins = false, showDatacenters
             .then(data => setInterconnectionData(data))
             .catch(err => console.error('Interconnection data not found:', err));
     }, []);
+
+    useEffect(() => {
+        console.log('[SchoolMap] showDatacenters toggled:', showDatacenters);
+    }, [showDatacenters]);
 
     if (!isMounted) return <div style={{ height: '600px', background: 'var(--midnight-blue)' }} className="flex items-center justify-center text-cool-mist text-xs uppercase tracking-widest">{t('loadingMap')}</div>;
 
@@ -180,7 +203,12 @@ export default function SchoolMap({ schools, showBasins = false, showDatacenters
                     />
                 )}
 
-                <MapController geojson={basinData} showBasins={showBasins} />
+                <MapController
+                    geojson={basinData}
+                    showBasins={showBasins}
+                    datacenters={dcData}
+                    showDatacenters={showDatacenters}
+                />
 
                 {/* Data Center Markers */}
                 {showDatacenters && dcData.map((dc, i) => (
