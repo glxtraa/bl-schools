@@ -74,7 +74,10 @@ export default function SchoolMap({ schools, showBasins = false, showDatacenters
         // Fetch School Basins
         fetch('/data/hydrobasins_l6_schools.geojson')
             .then(res => res.json())
-            .then(data => setBasinData(data))
+            .then(data => {
+                console.log('[SchoolMap] Loaded Basin Data:', data.features?.length, 'features');
+                setBasinData(data);
+            })
             .catch(err => console.error('School Basins not found:', err));
 
         // Fetch Datacenters
@@ -107,6 +110,8 @@ export default function SchoolMap({ schools, showBasins = false, showDatacenters
         const risk = riskData[hybasId];
         const riskClass = risk ? Math.floor(risk.overall_risk) : (feature.properties.risk_class || 0);
 
+        console.log(`[SchoolMap] Styling Basin ${hybasId}, Risk Class: ${riskClass}`);
+
         return {
             color: '#ffffff',
             weight: 1,
@@ -125,33 +130,22 @@ export default function SchoolMap({ schools, showBasins = false, showDatacenters
             layer.bindPopup(`
                 <div class="text-navy p-2 min-w-[200px]">
                     <div class="text-[10px] font-bold text-accent uppercase tracking-wider mb-1">HydroBASINS Level 6</div>
-                    <h3 class="text-sm font-bold mb-1">Basin ID: ${hybasId} (PFAF: ${PFAF_ID})</h3>
+                    <h2 class="text-sm font-bold mb-1">Basin ID: ${hybasId}</h2>
+                    <p class="text-[10px] text-cool-mist mb-2">PFAF ID: ${PFAF_ID}</p>
                     
                     ${risk ? `
-                        <div class="mt-2 p-1.5 bg-background/10 rounded border border-border/10">
-                            <div class="text-[9px] font-bold uppercase text-cool-mist mb-1">Aqueduct Risk Profile</div>
+                        <div class="mt-2 p-1.5 bg-[#f0f9ff] rounded border border-blue-100">
+                            <div class="text-[9px] font-bold uppercase text-blue-600 mb-1">Aqueduct Risk Profile</div>
                             <div class="flex justify-between text-[11px]">
                                 <span>Overall Risk:</span>
                                 <span class="font-bold">${risk.overall_risk.toFixed(1)} / 5.0</span>
                             </div>
-                            <div class="flex justify-between text-[11px]">
-                                <span>Physical Quantity:</span>
-                                <span class="font-bold">${risk.physical_quantity.toFixed(1)}</span>
-                            </div>
                         </div>
                     ` : ''}
 
-                    ${interconnection ? `
-                        <div class="mt-2 text-[10px] text-core-blue italic">
-                            ⚠️ ${interconnection.summary.substring(0, 100)}...
-                        </div>
-                    ` : ''}
-
-                    <div class="mt-2 pt-2 border-t border-border/20">
-                        <p class="text-[10px] text-cool-mist uppercase mb-1">Schools (${school_count}):</p>
-                        <div class="max-h-24 overflow-y-auto">
-                            <p class="text-[9px] text-cool-mist leading-relaxed">${schoolNames}</p>
-                        </div>
+                    <div class="mt-2 pt-2 border-t border-gray-100">
+                        <p class="text-[10px] text-gray-400 uppercase mb-1">Schools (${school_count}):</p>
+                        <p class="text-[9px] text-gray-600 leading-relaxed">${schoolNames}</p>
                     </div>
                 </div>
             `);
@@ -179,6 +173,7 @@ export default function SchoolMap({ schools, showBasins = false, showDatacenters
 
                 {showBasins && basinData && (
                     <GeoJSON
+                        key={`basins-${basinData.features?.length || 0}-${Object.keys(riskData).length}`}
                         data={basinData}
                         style={getBasinStyle}
                         onEachFeature={onEachBasin}
