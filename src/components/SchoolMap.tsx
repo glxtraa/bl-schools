@@ -195,16 +195,16 @@ export default function SchoolMap({ schools, showBasins = false, showDatacenters
                         icon={getDCIcon(dc.provider)}
                     >
                         <Popup>
-                            <div class="text-navy p-2">
-                                <div class="text-[10px] font-bold text-accent uppercase tracking-wider mb-1">${dc.provider} Data Center</div>
-                                <h3 class="text-sm font-bold mb-1">${dc.region}</h3>
-                                <div class="text-[10px] text-cool-mist uppercase mb-2">Basin ID: ${dc.basin_id}</div>
-                                <div class="pt-2 border-t border-border/20">
-                                    <div class="flex justify-between text-[11px] mb-1">
+                            <div className="text-navy p-2">
+                                <div className="text-[10px] font-bold text-accent uppercase tracking-wider mb-1">{dc.provider} Data Center</div>
+                                <h3 className="text-sm font-bold mb-1">{dc.region}</h3>
+                                <div className="text-[10px] text-cool-mist uppercase mb-2">Basin ID: {dc.basin_id}</div>
+                                <div className="pt-2 border-t border-border/20">
+                                    <div className="flex justify-between text-[11px] mb-1">
                                         <span>Water Usage:</span>
-                                        <span class="font-bold text-core-blue">${dc.water_usage}</span>
+                                        <span className="font-bold text-core-blue">{dc.water_usage}</span>
                                     </div>
-                                    <a href="${dc.disclosure_link}" target="_blank" class="text-[10px] text-accent hover:underline block mt-1">
+                                    <a href={dc.disclosure_link} target="_blank" className="text-[10px] text-accent hover:underline block mt-1">
                                         View Water Disclosure →
                                     </a>
                                 </div>
