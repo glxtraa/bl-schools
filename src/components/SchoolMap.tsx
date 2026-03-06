@@ -157,10 +157,11 @@ export default function SchoolMap({ schools, showBasins = false, showDatacenters
                     <p class="text-[10px] text-cool-mist mb-2">PFAF ID: ${PFAF_ID}</p>
                     
                     ${risk ? `
-                            <div className="text-[9px] font-bold uppercase text-blue-600 mb-1">{t('aqueductRiskProfile')}</div>
-                            <div className="flex justify-between text-[11px]">
-                                <span>{t('overallRisk')}:</span>
-                                <span className="font-bold">${risk.overall_risk.toFixed(1)} / 5.0</span>
+                        <div class="mt-2 p-1.5 bg-[#f0f9ff] rounded border border-blue-100">
+                            <div class="text-[9px] font-bold uppercase text-blue-600 mb-1">${t('aqueductRiskProfile')}</div>
+                            <div class="flex justify-between text-[11px]">
+                                <span>${t('overallRisk')}:</span>
+                                <span class="font-bold">${risk.overall_risk.toFixed(1)} / 5.0</span>
                             </div>
                         </div>
                     ` : ''}

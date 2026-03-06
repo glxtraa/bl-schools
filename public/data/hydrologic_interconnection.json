@@ -26,10 +26,10 @@
     "7060073910": {
         "shared_aquifer_risk": false,
         "transfer_system_dependent": true,
-        "summary": "Ecatepec North Basin. Experiences high pressure due to urban density and relies on the Cutzamala system for high-altitude distribution.",
+        "summary": "Zumpango-Ecatepec Northeast region. High-pressure urban corridor with significant hydrologic stress due to the Cutzamala system dependency.",
         "sources": [
             {
-                "title": "Ecatepec Water Management Plan",
+                "title": "CONAGUA Regional Water Plan",
                 "type": "Official Document",
                 "url": "#"
             }
@@ -38,10 +38,10 @@
     "7060073920": {
         "shared_aquifer_risk": true,
         "transfer_system_dependent": false,
-        "summary": "Chalco-Amecameca South Basin. Primarily dependent on local glacial recharge and mountain springs. Vulnerable to seasonal variability.",
+        "summary": "Chalco-Amecameca South Basin. Primarily dependent on mountain springs and glacier-derived recharge from the Popocatepetl watershed.",
         "sources": [
             {
-                "title": "Amecameca Hydrologic Study",
+                "title": "Amecameca Hydrologic Impact Study",
                 "type": "Research Paper",
                 "url": "#"
             }

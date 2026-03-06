@@ -137,8 +137,8 @@
         "HYBAS_ID": 7060073910,
         "PFAF_ID": 753240,
         "risk_class": 3,
-        "school_count": 6,
-        "schools": "BENITO JUAREZ, ZAPATA, PREPA 271, VICENTE GUERRERO, IGNACIO ALLENDE, FLORES MAGON"
+        "school_count": 1,
+        "schools": "BENITO JUAREZ"
       },
       "geometry": {
         "type": "Polygon",
@@ -173,6 +173,55 @@
               19.55
             ],
             [
+              -98.7,
+              19.45
+            ],
+            [
+              -99.0,
+              19.5
+            ],
+            [
+              -99.3,
+              19.6
+            ],
+            [
+              -99.4,
+              19.85
+            ],
+            [
+              -99.3,
+              20.0
+            ],
+            [
+              -99.2,
+              20.15
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "HYBAS_ID": 7060073920,
+        "PFAF_ID": 753250,
+        "risk_class": 4,
+        "school_count": 5,
+        "schools": "ZAPATA, PREPA 271, VICENTE GUERRERO, IGNACIO ALLENDE, FLORES MAGON"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -99.0,
+              19.5
+            ],
+            [
+              -98.7,
+              19.45
+            ],
+            [
               -98.55,
               19.45
             ],
@@ -205,24 +254,12 @@
               19.25
             ],
             [
-              -99.4,
+              -99.15,
+              19.45
+            ],
+            [
+              -99.0,
               19.5
-            ],
-            [
-              -99.5,
-              19.7
-            ],
-            [
-              -99.4,
-              19.85
-            ],
-            [
-              -99.3,
-              20.0
-            ],
-            [
-              -99.2,
-              20.15
             ]
           ]
         ]
