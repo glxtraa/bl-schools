@@ -229,7 +229,7 @@ export default function SchoolMap({ schools, showBasins = false, showDatacenters
                                     <div className={`text-[9px] font-bold uppercase mb-2 px-1.5 py-0.5 rounded inline-block ${school.riskLevel === 'high' ? 'bg-red-100 text-red-600' :
                                         school.riskLevel === 'medium' ? 'bg-orange-100 text-orange-600' : 'bg-green-100 text-green-600'
                                         }`}>
-                                        Risk: {school.riskLevel} (${school.riskScore}/100)
+                                        Risk: {school.riskLevel} ({school.riskScore}/100)
                                     </div>
                                 )}
 
