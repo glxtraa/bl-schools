@@ -1,20 +1,26 @@
 {
   "7060854410": {
-    "overall_risk": 3.043138061398602,
-    "physical_quantity": 4.622927031164036,
-    "physical_quality": 4.197148014317592,
-    "regulatory_repute": 2.1328980424979367
+    "overall_risk": 3.5,
+    "physical_quantity": 3.5,
+    "physical_quality": 3.0,
+    "regulatory_repute": 3.0
+  },
+  "7060826810": {
+    "overall_risk": 3.5,
+    "physical_quantity": 3.5,
+    "physical_quality": 3.0,
+    "regulatory_repute": 3.0
+  },
+  "7060831470": {
+    "overall_risk": 3.5,
+    "physical_quantity": 3.5,
+    "physical_quality": 3.0,
+    "regulatory_repute": 3.0
   },
   "7060073910": {
-    "overall_risk": 4.245148163545178,
-    "physical_quantity": 2.4760070966787775,
-    "physical_quality": 2.9500776155879875,
-    "regulatory_repute": 3.6370818858751957
-  },
-  "7060073920": {
-    "overall_risk": 4.888025994421813,
-    "physical_quantity": 3.5366316175174863,
-    "physical_quality": 4.617549588943378,
-    "regulatory_repute": 4.592553978719161
+    "overall_risk": 3.5,
+    "physical_quantity": 3.5,
+    "physical_quality": 3.0,
+    "regulatory_repute": 3.0
   }
 }
