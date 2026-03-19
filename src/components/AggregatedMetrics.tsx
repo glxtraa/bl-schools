@@ -107,20 +107,21 @@ export default function AggregatedMetrics({ schools, basinData }: AggregatedMetr
     const maxCum = Math.max(...chartData.map(d => d.cumulative), 1);
 
     return (
-        <div className="space-y-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="space-y-16 mt-20">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 {/* Incremental Chart */}
-                <div className="bg-midnight-blue/40 p-6 rounded-2xl border border-border/20 shadow-xl">
-                    <h3 className="text-xs font-bold text-accent uppercase tracking-widest mb-6">{t('incrementalUsage')}</h3>
-                    <div className="h-48 flex items-end gap-1 px-2 border-b border-l border-border/10">
+                <div className="card-premium relative animate-in">
+                    <div className="text-accent text-[10px] font-bold tracking-[0.3em] uppercase mb-6 opacity-80">{t('incrementalUsage')}</div>
+                    <div className="h-64 flex items-end gap-1.5 px-2 border-b-2 border-l-2 border-white/5 pb-2">
                         {chartData.map((d, i) => (
                             <div
                                 key={i}
-                                className="flex-1 bg-core-blue/60 hover:bg-core-blue transition-colors rounded-t-sm relative group"
-                                style={{ height: `${(d.incremental / maxInc) * 100}%` }}
+                                className="flex-1 bg-core-blue/30 hover:bg-accent transition-all duration-300 rounded-t-sm relative group animate-in"
+                                style={{ height: `${(d.incremental / maxInc) * 100}%`, animationDelay: `${i * 0.05}s` }}
                             >
-                                <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-navy text-[10px] p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity z-10 whitespace-nowrap border border-border/20">
-                                    {d.date}: {d.incremental.toFixed(1)} m³
+                                <div className="absolute -top-12 left-1/2 -translate-x-1/2 glass-panel text-[10px] font-bold p-2 rounded opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 whitespace-nowrap border border-accent/20">
+                                    <div className="text-accent mb-1">{d.date}</div>
+                                    <div className="text-ice-white font-black">{d.incremental.toFixed(1)} m³</div>
                                 </div>
                             </div>
                         ))}
@@ -128,20 +129,36 @@ export default function AggregatedMetrics({ schools, basinData }: AggregatedMetr
                 </div>
 
                 {/* Cumulative Chart */}
-                <div className="bg-midnight-blue/40 p-6 rounded-2xl border border-border/20 shadow-xl">
-                    <h3 className="text-xs font-bold text-accent uppercase tracking-widest mb-6">{t('cumulativeUsage')}</h3>
-                    <div className="h-48 relative border-b border-l border-border/10">
+                <div className="card-premium relative animate-in" style={{ animationDelay: '0.2s' }}>
+                    <div className="text-accent text-[10px] font-bold tracking-[0.3em] uppercase mb-6 opacity-80">{t('cumulativeUsage')}</div>
+                    <div className="h-64 relative border-b-2 border-l-2 border-white/5 pb-2">
                         <svg className="w-full h-full overflow-visible" preserveAspectRatio="none">
+                            <defs>
+                                <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.4" />
+                                    <stop offset="100%" stopColor="var(--accent)" stopOpacity="0" />
+                                </linearGradient>
+                            </defs>
+                            <path
+                                d={`M 0,100 ${chartData.map((d, i) => {
+                                    const x = (i / (chartData.length - 1)) * 100;
+                                    const y = 100 - (d.cumulative / maxCum) * 100;
+                                    return `L ${x},${y}`;
+                                }).join(' ')} L 100,100 Z`}
+                                fill="url(#chartGradient)"
+                            />
                             <polyline
                                 fill="none"
                                 stroke="var(--accent)"
-                                strokeWidth="2"
+                                strokeWidth="3"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                                 points={chartData.map((d, i) => {
                                     const x = (i / (chartData.length - 1)) * 100;
                                     const y = 100 - (d.cumulative / maxCum) * 100;
                                     return `${x}%,${y}%`;
                                 }).join(' ')}
-                                style={{ vectorEffect: 'non-scaling-stroke' }}
+                                style={{ vectorEffect: 'non-scaling-stroke', filter: 'drop-shadow(0 0 8px rgba(0,176,255,0.4))' }}
                             />
                         </svg>
                     </div>
@@ -149,69 +166,80 @@ export default function AggregatedMetrics({ schools, basinData }: AggregatedMetr
             </div>
 
             {/* Usage Table */}
-            <div className="overflow-hidden rounded-2xl border border-border/20 shadow-xl bg-midnight-blue/20">
-                <table className="w-full text-left text-[11px] border-collapse">
-                    <thead>
-                        <tr className="bg-navy/50 text-cool-mist uppercase tracking-widest border-b border-border/20">
-                            <th className="px-6 py-4 font-bold">{t('basinAggregation')}</th>
-                            <th className="px-6 py-4 font-bold">{t('lastUpdated')}</th>
-                            <th className="px-6 py-4 font-bold">{t('incrementalUsage')}</th>
-                            <th className="px-6 py-4 font-bold">{t('cumulativeUsage')}</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-border/10">
-                        {chartData.slice().reverse().map((row, i) => (
-                            <tr key={i} className="hover:bg-accent/5 transition-colors group">
-                                <td className="px-6 py-4 font-bold text-accent">{row.basin}</td>
-                                <td className="px-6 py-4 text-cool-mist">{row.date}</td>
-                                <td className="px-6 py-4 font-black">{row.incremental.toFixed(2)} m³</td>
-                                <td className="px-6 py-4 font-black text-core-blue">{row.cumulative.toFixed(2)} m³</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            <div className="animate-in" style={{ animationDelay: '0.4s' }}>
+                <div className="text-accent text-[10px] font-bold tracking-[0.3em] uppercase mb-4 opacity-80">{t('basinAggregation')}</div>
+                <div className="overflow-hidden glass-panel shadow-2xl">
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left text-[11px] border-collapse min-w-[600px]">
+                            <thead>
+                                <tr className="bg-white/5 text-cool-mist uppercase tracking-[0.2em] border-b border-white/10 font-black">
+                                    <th className="px-8 py-5">Basin ID</th>
+                                    <th className="px-8 py-5">Timestamp</th>
+                                    <th className="px-8 py-5 text-right">Delta (m³)</th>
+                                    <th className="px-8 py-5 text-right">Running Total (m³)</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-white/5">
+                                {chartData.slice().reverse().map((row, i) => (
+                                    <tr key={i} className="hover:bg-white/5 transition-colors group">
+                                        <td className="px-8 py-5 font-black text-accent">{row.basin}</td>
+                                        <td className="px-8 py-5 text-cool-mist font-medium">{row.date}</td>
+                                        <td className="px-8 py-5 font-black text-right text-lg">+{row.incremental.toFixed(2)}</td>
+                                        <td className="px-8 py-5 font-black text-right text-lg text-core-blue glow-text">{row.cumulative.toFixed(2)}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             {/* VWB Basin Report */}
-            <div className="space-y-6">
-                <h3 className="text-xs font-bold text-accent uppercase tracking-widest">{t('corporateOffsetCapacity')}</h3>
-                <div className="overflow-hidden rounded-2xl border border-accent/20 shadow-xl bg-midnight-blue/20">
-                    <table className="w-full text-left text-[11px] border-collapse">
-                        <thead>
-                            <tr className="bg-accent/10 text-accent uppercase tracking-widest border-b border-accent/20">
-                                <th className="px-6 py-4 font-bold">{t('basin')}</th>
-                                <th className="px-6 py-4 font-bold">{t('totalBasinBenefit')}</th>
-                                <th className="px-6 py-4 font-bold">{t('riskAdjustedValue')}</th>
-                                <th className="px-6 py-4 font-bold">{t('confidenceScore')}</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-border/10">
-                            {basinAggregates.map((row, i) => (
-                                <tr key={i} className="hover:bg-accent/5 transition-colors group">
-                                    <td className="px-6 py-4 font-bold">{row.basin}</td>
-                                    <td className="px-6 py-4 font-black text-ice-white">{row.totalVwb.toFixed(2)} m³</td>
-                                    <td className="px-6 py-4 font-black text-green-400">$ {row.riskAdjusted.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center gap-2">
-                                            <div className="flex-1 h-1 bg-navy rounded-full overflow-hidden max-w-[60px]">
-                                                <div 
-                                                    className="h-full bg-accent" 
-                                                    style={{ width: `${row.confidence * 100}%` }}
-                                                ></div>
-                                            </div>
-                                            <span className="text-[10px] font-mono">{(row.confidence * 100).toFixed(0)}%</span>
+            <div className="space-y-8 animate-in" style={{ animationDelay: '0.6s' }}>
+                <div className="text-accent text-[10px] font-bold tracking-[0.3em] uppercase opacity-80">{t('corporateOffsetCapacity')}</div>
+                <div className="grid grid-cols-1 gap-4">
+                    {basinAggregates.map((row, i) => (
+                        <div key={i} className="card-premium !py-6 flex flex-col md:flex-row items-center gap-8 group">
+                            <div className="flex-1">
+                                <div className="text-[9px] font-bold text-cool-mist uppercase tracking-[0.2em] mb-1">{t('basin')}</div>
+                                <div className="text-2xl font-black uppercase tracking-tight group-hover:text-accent transition-colors">{row.basin}</div>
+                            </div>
+                            
+                            <div className="w-full md:w-auto flex gap-12 text-center md:text-left">
+                                <div>
+                                    <div className="text-[9px] font-bold text-cool-mist uppercase tracking-[0.2em] mb-1">Total Benefit</div>
+                                    <div className="text-xl font-black text-ice-white">{row.totalVwb.toFixed(1)} <span className="text-[10px] font-normal opacity-50 uppercase tracking-tighter">m³</span></div>
+                                </div>
+                                <div>
+                                    <div className="text-[9px] font-bold text-cool-mist uppercase tracking-[0.2em] mb-1">CSR Value</div>
+                                    <div className="text-xl font-black text-green-400">$ {(row.riskAdjusted / 10).toFixed(2)}K</div>
+                                </div>
+                                <div className="min-w-[120px]">
+                                    <div className="text-[9px] font-bold text-cool-mist uppercase tracking-[0.2em] mb-1">Audit Score</div>
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex-1 h-1.5 bg-navy rounded-full overflow-hidden">
+                                            <div 
+                                                className="h-full bg-accent glow-text" 
+                                                style={{ width: `${row.confidence * 100}%`, boxShadow: '0 0 10px var(--accent)' }}
+                                            ></div>
                                         </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                                        <span className="text-[10px] font-black font-mono">{(row.confidence * 100).toFixed(0)}%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
 
             {/* Assumption Warning */}
-            <div className="bg-amber-500/5 p-4 rounded-xl border border-amber-500/10 text-[10px] text-amber-200/60 leading-relaxed italic">
-                * {t('assumptionsNote') || 'Aggregation based on school visit history. Incremental usage calculated as the difference between consecutive readings. For the first recorded visit of a meter, the reading is treated as initial usage. Resets are detected and handled as new initial readings.'}
+            <div className="glass-panel p-6 border-amber-500/10 animate-in" style={{ animationDelay: '0.8s' }}>
+                <div className="flex gap-4">
+                    <span className="text-amber-500">⚠️</span>
+                    <p className="text-[11px] text-amber-200/50 leading-relaxed italic font-medium uppercase tracking-wider">
+                        {t('assumptionsNote')}
+                    </p>
+                </div>
             </div>
         </div>
     );

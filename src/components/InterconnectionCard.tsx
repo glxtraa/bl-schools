@@ -19,41 +19,59 @@ export default function InterconnectionCard() {
     if (basins.length === 0) return null;
 
     return (
-        <div className="bg-midnight-blue/40 backdrop-blur-md rounded-xl p-4 border border-border/20 shadow-2xl">
-            <h4 className="text-[10px] font-bold text-accent uppercase tracking-widest mb-4">{t('hydrologicInterconnection')}</h4>
+        <div className="glass-panel p-6 shadow-2xl">
+            <h4 className="text-[10px] font-bold text-accent uppercase tracking-[0.3em] mb-6 opacity-80">{t('hydrologicInterconnection')}</h4>
 
-            <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 scrollbar-thin">
+            <div className="space-y-6 max-h-[450px] overflow-y-auto pr-3 custom-scrollbar">
                 {basins.map(([id, info]: [string, any]) => (
-                    <div key={id} className="space-y-2 border-b border-border/10 pb-4 last:border-0">
+                    <div key={id} className="space-y-3 border-b border-white/5 pb-6 last:border-0 last:pb-0 group">
                         <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-bold text-core-blue">{t('basin')} {id}</span>
-                            <div className="flex gap-1">
+                            <span className="text-[11px] font-black text-core-blue uppercase tracking-widest group-hover:text-accent transition-colors">
+                                {t('basin')} <span className="text-sm">{id}</span>
+                            </span>
+                            <div className="flex gap-1.5">
                                 {info.shared_aquifer_risk && (
-                                    <span className="bg-red-500/10 text-red-400 text-[8px] px-1.5 py-0.5 rounded border border-red-500/20">{t('aquiferRisk')}</span>
+                                    <span className="bg-red-500/10 text-red-400 text-[8px] px-2 py-0.5 rounded-sm border border-red-500/20 font-bold uppercase tracking-tighter">
+                                        {t('aquiferRisk')}
+                                    </span>
                                 )}
                                 {info.transfer_system_dependent && (
-                                    <span className="bg-amber-500/10 text-amber-400 text-[8px] px-1.5 py-0.5 rounded border border-amber-500/20">{t('transferDep')}</span>
+                                    <span className="bg-amber-500/10 text-amber-400 text-[8px] px-2 py-0.5 rounded-sm border border-amber-500/20 font-bold uppercase tracking-tighter">
+                                        {t('transferDep')}
+                                    </span>
                                 )}
                             </div>
                         </div>
-                        <p className="text-[10px] text-cool-mist leading-relaxed italic">
-                            {info.summary}
+                        <p className="text-[10px] text-cool-mist leading-relaxed italic opacity-70 group-hover:opacity-100 transition-opacity">
+                            "{info.summary}"
                         </p>
-                        <div className="space-y-1">
+                        <div className="space-y-1.5">
                             {info.sources.map((s: any, i: number) => (
                                 <a
                                     key={i}
                                     href={s.url}
                                     target="_blank"
-                                    className="block text-[9px] text-accent hover:underline flex items-center gap-1"
+                                    className="block text-[9px] text-accent/70 hover:text-accent transition-colors flex items-center gap-2 group/link"
                                 >
-                                    <span>🔗</span> {s.title} ({s.type})
+                                    <span className="opacity-50 group-hover/link:opacity-100">🔗</span> 
+                                    <span className="uppercase tracking-wider truncate font-medium">{s.title}</span>
+                                    <span className="text-[8px] opacity-40">({s.type})</span>
                                 </a>
                             ))}
                         </div>
                     </div>
                 ))}
             </div>
+
+            <style jsx>{`
+                .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+                .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+                .custom-scrollbar::-webkit-scrollbar-thumb { 
+                    background: var(--midnight-blue); 
+                    border-radius: 10px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+            `}</style>
         </div>
     );
 }

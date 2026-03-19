@@ -152,27 +152,30 @@ export default function SchoolMap({ schools, showBasins = false, showDatacenters
             const interconnection = interconnectionData[hybasId];
 
             layer.bindPopup(`
-                <div class="text-navy p-2 min-w-[200px]">
-                    <div class="text-[10px] font-bold text-accent uppercase tracking-wider mb-1">HydroBASINS Level 6</div>
-                    <h2 class="text-sm font-bold mb-1">Basin ID: ${hybasId}</h2>
-                    <p class="text-[10px] text-cool-mist mb-2">PFAF ID: ${PFAF_ID}</p>
+                <div class="glass-panel p-4 min-w-[240px]" style="background: var(--dark-navy); color: var(--ice-white);">
+                    <div class="text-[9px] font-bold text-accent uppercase tracking-[0.2em] mb-2 opacity-80">HydroBASINS Level 6</div>
+                    <h2 class="text-lg font-extrabold mb-1 uppercase tracking-tight">Basin ID: ${hybasId}</h2>
+                    <p class="text-[10px] text-cool-mist mb-4 uppercase tracking-widest opacity-60">PFAF ID: ${PFAF_ID}</p>
                     
                     ${risk ? `
-                        <div class="mt-2 p-1.5 bg-[#f0f9ff] rounded border border-blue-100">
-                            <div class="text-[9px] font-bold uppercase text-blue-600 mb-1">${t('aqueductRiskProfile')}</div>
-                            <div class="flex justify-between text-[11px]">
-                                <span>${t('overallRisk')}:</span>
-                                <span class="font-bold">${risk.overall_risk.toFixed(1)} / 5.0</span>
+                        <div class="mt-4 p-3 bg-navy/40 border border-accent/20">
+                            <div class="text-[8px] font-bold uppercase tracking-[0.2em] text-accent mb-2">${t('aqueductRiskProfile')}</div>
+                            <div class="flex justify-between items-baseline">
+                                <span class="text-[10px] text-cool-mist uppercase tracking-wider">${t('overallRisk')}</span>
+                                <span class="text-xl font-extrabold text-ice-white">${risk.overall_risk.toFixed(1)} <span class="text-[10px] font-normal opacity-50">/ 5.0</span></span>
                             </div>
                         </div>
                     ` : ''}
 
-                    <div class="mt-2 pt-2 border-t border-gray-100">
-                        <p class="text-[10px] text-gray-400 uppercase mb-1">${t('schoolsCount')} (${school_count}):</p>
-                        <p class="text-[9px] text-gray-600 leading-relaxed">${schoolNames}</p>
+                    <div class="mt-4 pt-4 border-t border-border/20">
+                        <p class="text-[9px] text-cool-mist uppercase tracking-[0.15em] mb-2">${t('schoolsCount')} (${school_count}):</p>
+                        <p class="text-[10px] text-ice-white/80 leading-relaxed font-medium">${schoolNames}</p>
                     </div>
                 </div>
-            `);
+            `, {
+                className: 'custom-popup-premium',
+                maxWidth: 300
+            });
 
             layer.on({
                 mouseover: (e: any) => {
