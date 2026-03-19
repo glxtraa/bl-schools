@@ -6,6 +6,7 @@ import { getSchools } from '@/lib/data-parser';
 import { School } from '@/lib/types';
 import SchoolList from '@/components/SchoolList';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import Link from 'next/link';
 import { useLanguage, LanguageProvider } from '@/lib/i18n';
 
 const SchoolMap = dynamic(() => import('@/components/SchoolMap'), {
@@ -190,9 +191,9 @@ function DashboardContent() {
       <footer className="mt-40 pt-12 border-t border-border flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] text-cool-mist uppercase tracking-[0.2em] pb-20">
         <div>&copy; 2026 Blue Lifeline — {t('footerTagline')}</div>
         <div className="flex gap-8">
-          <a href="#" className="hover:text-accent transition-colors">Documentation</a>
-          <a href="#" className="hover:text-accent transition-colors">Privacy</a>
-          <a href="#" className="hover:text-accent transition-colors">Vercel candidate</a>
+          <Link href="/documentation" className="hover:text-accent transition-colors">Documentation</Link>
+          <Link href="/privacy" className="hover:text-accent transition-colors">Privacy</Link>
+          <Link href="/vercel-candidate" className="hover:text-accent transition-colors">Vercel candidate</Link>
         </div>
       </footer>
     </main>
