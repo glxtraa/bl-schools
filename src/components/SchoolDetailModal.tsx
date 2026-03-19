@@ -238,6 +238,66 @@ export default function SchoolDetailModal({ school, onClose }: SchoolDetailModal
                                 </div>
                             </div>
                         </div>
+
+                        {/* VWB Auditor View */}
+                        <div className="md:col-span-2 bg-accent/5 p-8 rounded-2xl border border-accent/10">
+                            <h3 className="text-accent text-xs font-bold tracking-widest uppercase mb-6 border-b border-accent/20 pb-2">
+                                {t('volumetricBenefit')} — Auditor View
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                <div className="space-y-6">
+                                    <div>
+                                        <span className="text-cool-mist uppercase block text-[10px] tracking-wider mb-2">{t('restorationBenefit')}</span>
+                                        <p className="text-2xl font-black text-ice-white">{school.vwb?.restorationBenefit.toFixed(2)} <span className="text-xs font-normal text-cool-mist">m³</span></p>
+                                        <p className="text-[9px] text-cool-mist mt-1 italic uppercase tracking-tighter">Verified Rainwater Capture</p>
+                                    </div>
+                                    <div>
+                                        <span className="text-cool-mist uppercase block text-[10px] tracking-wider mb-2">{t('conservationBenefit')}</span>
+                                        <p className="text-2xl font-black text-ice-white">{school.vwb?.conservationBenefit.toFixed(2)} <span className="text-xs font-normal text-cool-mist">m³</span></p>
+                                        <p className="text-[9px] text-cool-mist mt-1 italic uppercase tracking-tighter">Efficiency & Storage Gains</p>
+                                    </div>
+                                </div>
+
+                                <div className="bg-navy/40 p-6 rounded-xl border border-border/10">
+                                    <div className="mb-4">
+                                        <span className="text-accent uppercase block text-[10px] tracking-wider mb-2">{t('riskAdjustedValue')}</span>
+                                        <p className="text-3xl font-black text-green-400">$ {school.vwb?.riskAdjustedValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
+                                    </div>
+                                    <div className="pt-4 border-t border-border/10 space-y-2">
+                                        <div className="flex justify-between text-[10px]">
+                                            <span className="text-cool-mist">Corporate Multiplier:</span>
+                                            <span className="text-accent font-bold">x{(school.vwb?.riskAdjustedValue && school.vwb?.totalBenefitM3) ? (school.vwb.riskAdjustedValue / (school.vwb.totalBenefitM3 * 12.5)).toFixed(1) : '1.0'}</span>
+                                        </div>
+                                        <div className="flex justify-between text-[10px]">
+                                            <span className="text-cool-mist">Unit Price (CSR):</span>
+                                            <span className="text-ice-white">$ 12.50 / m³</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-6">
+                                    <div>
+                                        <span className="text-cool-mist uppercase block text-[10px] tracking-wider mb-2">{t('confidenceScore')}</span>
+                                        <div className="flex items-center gap-3">
+                                            <div className="text-2xl font-black text-ice-white">{((school.vwb?.confidenceScore || 0) * 100).toFixed(0)}%</div>
+                                            <div className="flex-1 h-2 bg-navy rounded-full overflow-hidden">
+                                                <div 
+                                                    className="h-full bg-accent animate-pulse" 
+                                                    style={{ width: `${(school.vwb?.confidenceScore || 0) * 100}%` }}
+                                                ></div>
+                                            </div>
+                                        </div>
+                                        <p className="text-[9px] text-cool-mist mt-1 uppercase tracking-tighter">
+                                            {school.vwb?.confidenceScore === 1.0 ? '✓ High Audit Assurance' : '⚠ Partial Data Verification'}
+                                        </p>
+                                    </div>
+                                    <button className="w-full bg-accent/20 border border-accent/40 text-accent text-[10px] font-bold uppercase tracking-widest py-3 hover:bg-accent hover:text-navy transition-all flex items-center justify-center gap-2">
+                                        <span>Download Audit Certificate</span>
+                                        <span>📂</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div>

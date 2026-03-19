@@ -42,4 +42,11 @@ export interface School {
   riskScore?: number;
   riskLevel?: 'low' | 'medium' | 'high';
   riskReasons?: string[];
+  vwb?: {
+    totalBenefitM3: number;
+    restorationBenefit: number;
+    conservationBenefit: number;
+    riskAdjustedValue: number;
+    confidenceScore: number;
+  };
 }

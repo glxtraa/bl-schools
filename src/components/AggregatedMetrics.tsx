@@ -33,17 +33,24 @@ export default function AggregatedMetrics({ schools, basinData }: AggregatedMetr
             dataByBasin[basin].push({
                 date: school.lastUpdated,
                 reading: parseFloat(school.meterReading) || 0,
-                schoolName: school.name
+                schoolName: school.name,
+                vwb: school.vwb
             });
         });
 
         // Sort by date and calculate increments
         const result: any[] = [];
+        const basinAggregates: Record<string, { totalVwb: number, riskAdjusted: number, avgConfidence: number, count: number }> = {};
+
         Object.entries(dataByBasin).forEach(([basin, visits]) => {
             visits.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
             let cumulative = 0;
             let lastReading = 0;
+
+            if (!basinAggregates[basin]) {
+                basinAggregates[basin] = { totalVwb: 0, riskAdjusted: 0, avgConfidence: 0, count: 0 };
+            }
 
             visits.forEach((visit, i) => {
                 let increment = 0;
@@ -56,6 +63,13 @@ export default function AggregatedMetrics({ schools, basinData }: AggregatedMetr
 
                 cumulative += increment;
                 lastReading = visit.reading;
+
+                if (visit.vwb) {
+                    basinAggregates[basin].totalVwb += visit.vwb.totalBenefitM3;
+                    basinAggregates[basin].riskAdjusted += visit.vwb.riskAdjustedValue;
+                    basinAggregates[basin].avgConfidence += visit.vwb.confidenceScore;
+                    basinAggregates[basin].count++;
+                }
 
                 result.push({
                     basin,
@@ -74,11 +88,23 @@ export default function AggregatedMetrics({ schools, basinData }: AggregatedMetr
             dailyData[r.date].cumulative += r.cumulative;
         });
 
-        return Object.values(dailyData).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        const chartData = Object.values(dailyData).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+        return {
+            chartData,
+            basinAggregates: Object.entries(basinAggregates).map(([basin, data]) => ({
+                basin,
+                totalVwb: data.totalVwb,
+                riskAdjusted: data.riskAdjusted,
+                confidence: data.count > 0 ? data.avgConfidence / data.count : 0
+            }))
+        };
     }, [schools, basinData, t]);
 
-    const maxInc = Math.max(...aggregation.map(d => d.incremental), 1);
-    const maxCum = Math.max(...aggregation.map(d => d.cumulative), 1);
+    const { chartData, basinAggregates } = aggregation;
+
+    const maxInc = Math.max(...chartData.map(d => d.incremental), 1);
+    const maxCum = Math.max(...chartData.map(d => d.cumulative), 1);
 
     return (
         <div className="space-y-12">
@@ -87,7 +113,7 @@ export default function AggregatedMetrics({ schools, basinData }: AggregatedMetr
                 <div className="bg-midnight-blue/40 p-6 rounded-2xl border border-border/20 shadow-xl">
                     <h3 className="text-xs font-bold text-accent uppercase tracking-widest mb-6">{t('incrementalUsage')}</h3>
                     <div className="h-48 flex items-end gap-1 px-2 border-b border-l border-border/10">
-                        {aggregation.map((d, i) => (
+                        {chartData.map((d, i) => (
                             <div
                                 key={i}
                                 className="flex-1 bg-core-blue/60 hover:bg-core-blue transition-colors rounded-t-sm relative group"
@@ -110,8 +136,8 @@ export default function AggregatedMetrics({ schools, basinData }: AggregatedMetr
                                 fill="none"
                                 stroke="var(--accent)"
                                 strokeWidth="2"
-                                points={aggregation.map((d, i) => {
-                                    const x = (i / (aggregation.length - 1)) * 100;
+                                points={chartData.map((d, i) => {
+                                    const x = (i / (chartData.length - 1)) * 100;
                                     const y = 100 - (d.cumulative / maxCum) * 100;
                                     return `${x}%,${y}%`;
                                 }).join(' ')}
@@ -122,7 +148,7 @@ export default function AggregatedMetrics({ schools, basinData }: AggregatedMetr
                 </div>
             </div>
 
-            {/* Data Table */}
+            {/* Usage Table */}
             <div className="overflow-hidden rounded-2xl border border-border/20 shadow-xl bg-midnight-blue/20">
                 <table className="w-full text-left text-[11px] border-collapse">
                     <thead>
@@ -134,7 +160,7 @@ export default function AggregatedMetrics({ schools, basinData }: AggregatedMetr
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-border/10">
-                        {aggregation.slice().reverse().map((row, i) => (
+                        {chartData.slice().reverse().map((row, i) => (
                             <tr key={i} className="hover:bg-accent/5 transition-colors group">
                                 <td className="px-6 py-4 font-bold text-accent">{row.basin}</td>
                                 <td className="px-6 py-4 text-cool-mist">{row.date}</td>
@@ -144,6 +170,43 @@ export default function AggregatedMetrics({ schools, basinData }: AggregatedMetr
                         ))}
                     </tbody>
                 </table>
+            </div>
+
+            {/* VWB Basin Report */}
+            <div className="space-y-6">
+                <h3 className="text-xs font-bold text-accent uppercase tracking-widest">{t('corporateOffsetCapacity')}</h3>
+                <div className="overflow-hidden rounded-2xl border border-accent/20 shadow-xl bg-midnight-blue/20">
+                    <table className="w-full text-left text-[11px] border-collapse">
+                        <thead>
+                            <tr className="bg-accent/10 text-accent uppercase tracking-widest border-b border-accent/20">
+                                <th className="px-6 py-4 font-bold">{t('basin')}</th>
+                                <th className="px-6 py-4 font-bold">{t('totalBasinBenefit')}</th>
+                                <th className="px-6 py-4 font-bold">{t('riskAdjustedValue')}</th>
+                                <th className="px-6 py-4 font-bold">{t('confidenceScore')}</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border/10">
+                            {basinAggregates.map((row, i) => (
+                                <tr key={i} className="hover:bg-accent/5 transition-colors group">
+                                    <td className="px-6 py-4 font-bold">{row.basin}</td>
+                                    <td className="px-6 py-4 font-black text-ice-white">{row.totalVwb.toFixed(2)} m³</td>
+                                    <td className="px-6 py-4 font-black text-green-400">$ {row.riskAdjusted.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                                    <td className="px-6 py-4">
+                                        <div className="flex items-center gap-2">
+                                            <div className="flex-1 h-1 bg-navy rounded-full overflow-hidden max-w-[60px]">
+                                                <div 
+                                                    className="h-full bg-accent" 
+                                                    style={{ width: `${row.confidence * 100}%` }}
+                                                ></div>
+                                            </div>
+                                            <span className="text-[10px] font-mono">{(row.confidence * 100).toFixed(0)}%</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {/* Assumption Warning */}

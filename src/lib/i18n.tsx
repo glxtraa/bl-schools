@@ -74,6 +74,13 @@ const translations: Translations = {
     extreme: { en: "Extreme", es: "Extremo" },
     schoolsCount: { en: "Schools", es: "Escuelas" },
     overallRisk: { en: "Overall Risk", es: "Riesgo General" },
+    volumetricBenefit: { en: "Volumetric Water Benefit", es: "Beneficio de Agua Volumétrico" },
+    restorationBenefit: { en: "Restoration Benefit", es: "Beneficio por Restauración" },
+    conservationBenefit: { en: "Conservation Benefit", es: "Beneficio por Conservación" },
+    riskAdjustedValue: { en: "Risk-Adjusted CSR Value", es: "Valor CSR Ajustado por Riesgo" },
+    confidenceScore: { en: "Audit Confidence Score", es: "Puntaje de Confianza de Auditoría" },
+    corporateOffsetCapacity: { en: "Corporate Offset Capacity", es: "Capacidad de Compensación Corporativa" },
+    totalBasinBenefit: { en: "Total Basin Benefit", es: "Beneficio Total de la Cuenca" },
 };
 
 interface LanguageContextType {

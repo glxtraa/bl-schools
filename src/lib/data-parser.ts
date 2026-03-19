@@ -2,6 +2,7 @@ import Papa from 'papaparse';
 import fs from 'fs';
 import path from 'path';
 import { School } from './types';
+import { VWB_CONFIG } from './vwb-config';
 
 export async function getSchools(): Promise<School[]> {
     const filePath = path.join(process.cwd(), 'src/data/school-data.csv');
@@ -55,6 +56,12 @@ export async function getSchools(): Promise<School[]> {
                     // 5. Risk Modeling (Section 9)
                     const { riskScore, riskLevel, riskReasons } = calculateRisk(row);
 
+                    // 6. VWB Accounting
+                    // Note: Verification status is traditionally pulled from the Rain Analyzer 
+                    // which uses CID/Blockchain. For now we proxy it.
+                    const isVerified = row['¿EL MEDIDOR FUNCIONA CORRECTAMENTE?'] === 'SI';
+                    const vwb = calculateVWB(row, hasCoordinates, isVerified);
+
                     return {
                         id: schoolId,
                         index: index.toString(),
@@ -89,7 +96,8 @@ export async function getSchools(): Promise<School[]> {
                         notes: row['DESCRIBE BREVEMENTE LA SITUACION DE AGUA EN LA ESCUELA'] || row['DESCRIBE LA SITUACION'] || '',
                         riskScore,
                         riskLevel,
-                        riskReasons
+                        riskReasons,
+                        vwb
                     };
                 });
 
@@ -148,4 +156,37 @@ function calculateRisk(row: any): { riskScore: number, riskLevel: 'low' | 'mediu
     else if (score >= 30) level = 'medium';
 
     return { riskScore: Math.min(100, score), riskLevel: level, riskReasons: reasons };
+}
+
+function calculateVWB(row: any, hasCoords: boolean, isVerified: boolean): School['vwb'] {
+    // 1. Restoration Benefit (Rainwater Harvesting)
+    // Formula: Precipitation (mm) * Area (m2) * Runoff Coeff
+    const rainMm = parseFloat(row['r_precipitacion_total']) || 0; 
+    const area = VWB_CONFIG.DEFAULT_CATCHMENT_AREA_M2; // Ideally this would be in the CSV
+    const restorationBenefit = (rainMm / 1000) * area * VWB_CONFIG.RUNOFF_COEFFICIENT;
+
+    // 2. Conservation Benefit (Capacity Based & Leakage Reduction proxy)
+    // Formula: (Total Liters / 1000) * usage_factor
+    const capacityM3 = (parseInt(row['almacen_total']) || 0) / 1000;
+    const conservationBenefit = capacityM3 * 0.1; // 10% efficiency gain proxy
+
+    const totalBenefitM3 = restorationBenefit + conservationBenefit;
+
+    // 3. Risk-Adjusted Value
+    const riskLevel = (calculateRisk(row).riskLevel as keyof typeof VWB_CONFIG.BASIN_RISK_MULTIPLIERS) || 'medium';
+    const multiplier = VWB_CONFIG.BASIN_RISK_MULTIPLIERS[riskLevel];
+    const riskAdjustedValue = totalBenefitM3 * multiplier * VWB_CONFIG.VOLUMETRIC_UNIT_PRICE;
+
+    // 4. Confidence Score
+    let confidenceScore = VWB_CONFIG.CONFIDENCE_SCORES.UNVERIFIED;
+    if (isVerified) confidenceScore = VWB_CONFIG.CONFIDENCE_SCORES.VERIFIED_BLOCKCHAIN;
+    else if (hasCoords) confidenceScore = VWB_CONFIG.CONFIDENCE_SCORES.MANUAL_ENTRY;
+
+    return {
+        totalBenefitM3,
+        restorationBenefit,
+        conservationBenefit,
+        riskAdjustedValue,
+        confidenceScore
+    };
 }
